@@ -1,1 +1,2 @@
-# Unity_CATechAccel2021
+# 概要
+CATechAccel2021 Untiyチームの開発用リポジトリ
