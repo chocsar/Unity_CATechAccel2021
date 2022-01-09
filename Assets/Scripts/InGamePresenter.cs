@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class  InGamePresenter : MonoBehaviour
 {
+    private InGameModel inGameModel;
+    private InGameView inGameView;
+
     [SerializeField] private Cell[] cells;
-    [SerializeField] private Text scoreText;
     private readonly int[,] _stageState = new int[4, 4];
 
     /// <summary>
@@ -13,10 +14,17 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private bool isDirty;
 
-    private int score;
 
     private void Start()
     {
+
+        inGameModel = GetComponent<InGameModel>();
+        inGameView = GetComponent<InGameView>();
+
+        // Modelの値の変更を監視する
+        inGameModel.changeScore += inGameView.SetScore;
+        
+
         // ステージの初期状態を生成
         for (var i = 0; i < 4; i++)
         {
@@ -26,10 +34,10 @@ public class GameManager : MonoBehaviour
             }
         }
         var posA = new Vector2(Random.Range(0, 4), Random.Range(0, 4));
-        var posB = new Vector2((posA.x + Random.Range(1, 3)) % 4, (posA.y + Random.Range(1, 3))% 4);
+        var posB = new Vector2((posA.x + Random.Range(1, 3)) % 4, (posA.y + Random.Range(1, 3)) % 4);
         _stageState[(int)posA.x, (int)posA.y] = 2;
-        _stageState[(int) posB.x, (int) posB.y] = Random.Range(0, 1.0f) < 0.5f ? 2 : 4;
-        
+        _stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < 0.5f ? 2 : 4;
+
         // ステージの初期状態をViewに反映
         for (var i = 0; i < 4; i++)
         {
@@ -40,10 +48,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    
+
     private void Update()
     {
+
         isDirty = false;
-        // 入力検知
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             for (var col = 4; col >= 0; col--)
@@ -64,6 +75,7 @@ public class GameManager : MonoBehaviour
                     Check(row, col, -1, 0);
                 }
             }
+
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -101,12 +113,16 @@ public class GameManager : MonoBehaviour
 
             if (IsGameOver(_stageState))
             {
-                PlayerPrefs.SetInt("SCORE", score);
+                PlayerPrefs.SetInt("SCORE", inGameModel.GetScore());
                 LoadResultScene();
             }
         }
+
     }
+
     
+    
+
     private bool BorderCheck(int row, int column, int horizontal, int vertical)
     {
         // チェックマスが4x4外ならそれ以上処理を行わない
@@ -114,7 +130,7 @@ public class GameManager : MonoBehaviour
         {
             return false;
         }
-        
+
         // 移動先が4x4外ならそれ以上処理は行わない
         var nextRow = row + vertical;
         var nextCol = column + horizontal;
@@ -153,20 +169,20 @@ public class GameManager : MonoBehaviour
         // 移動先の位置を計算
         var nextRow = row + vertical;
         var nextCol = column + horizontal;
-        
+
         // 移動元と移動先の値を取得
         var value = _stageState[row, column];
         var nextValue = _stageState[nextRow, nextCol];
-        
+
         // 次の移動先のマスが0の場合は移動する
         if (nextValue == 0)
         {
             // 移動元のマスは空欄になるので0を埋める
             _stageState[row, column] = 0;
-            
+
             // 移動先のマスに移動元のマスの値を代入する
             _stageState[nextRow, nextCol] = value;
-            
+
             // 移動先のマスでさらに移動チェック
             Move(nextRow, nextCol, horizontal, vertical);
         }
@@ -175,8 +191,8 @@ public class GameManager : MonoBehaviour
         {
             _stageState[row, column] = 0;
             _stageState[nextRow, nextCol] = value * 2;
-            score += value * 2;
-            scoreText.text = $"Score: {score}";
+            inGameModel.SetScore(value);
+            
         }
         // 異なる値のときは移動処理を終了
         else if (value != nextValue)
@@ -260,4 +276,5 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("ResultScene");
     }
+
 }
