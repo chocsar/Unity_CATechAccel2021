@@ -65,8 +65,7 @@ public class  InGamePresenter : MonoBehaviour
                 }
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             for (var row = 0; row < 4; row++)
             {
@@ -77,8 +76,7 @@ public class  InGamePresenter : MonoBehaviour
             }
 
         }
-
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             for (var row = 0; row < 4; row++)
             {
@@ -88,8 +86,7 @@ public class  InGamePresenter : MonoBehaviour
                 }
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             for (var row = 4; row >= 0; row--)
             {
