@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class  InGamePresenter : MonoBehaviour
+public class InGamePresenter : MonoBehaviour
 {
     private InGameModel inGameModel;
     private InGameView inGameView;
 
+    private const int squareSize = 4;
+    private int[] generateCellNumber = new int[2]{2,4};
+    private const float resultProbability = 0.5f;
     [SerializeField] private Cell[] cells;
-    private readonly int[,] _stageState = new int[4, 4];
+    private readonly int[,] _stageState = new int[squareSize, squareSize];
 
     /// <summary>
     /// 盤面の再描画を行う必要があるかのフラグ
@@ -26,24 +29,24 @@ public class  InGamePresenter : MonoBehaviour
         
 
         // ステージの初期状態を生成
-        for (var i = 0; i < 4; i++)
+        for (var i = 0; i < squareSize; i++)
         {
-            for (var j = 0; j < 4; j++)
+            for (var j = 0; j < squareSize; j++)
             {
                 _stageState[i, j] = 0;
             }
         }
-        var posA = new Vector2(Random.Range(0, 4), Random.Range(0, 4));
-        var posB = new Vector2((posA.x + Random.Range(1, 3)) % 4, (posA.y + Random.Range(1, 3)) % 4);
-        _stageState[(int)posA.x, (int)posA.y] = 2;
-        _stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < 0.5f ? 2 : 4;
+        var posA = new Vector2(Random.Range(0, squareSize), Random.Range(0, squareSize));
+        var posB = new Vector2((posA.x + Random.Range(1, squareSize-1)) % squareSize, (posA.y + Random.Range(1, squareSize-1)) % squareSize);
+        _stageState[(int)posA.x, (int)posA.y] = generateCellNumber[0];
+        _stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < resultProbability ? generateCellNumber[0] : generateCellNumber[1];
 
         // ステージの初期状態をViewに反映
-        for (var i = 0; i < 4; i++)
+        for (var i = 0; i < squareSize; i++)
         {
-            for (var j = 0; j < 4; j++)
+            for (var j = 0; j < squareSize; j++)
             {
-                cells[i * 4 + j].SetText(_stageState[i, j]);
+                cells[i * squareSize + j].SetText(_stageState[i, j]);
             }
         }
     }
@@ -57,9 +60,9 @@ public class  InGamePresenter : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            for (var col = 4; col >= 0; col--)
+            for (var col = squareSize; col >= 0; col--)
             {
-                for (var row = 0; row < 4; row++)
+                for (var row = 0; row < squareSize; row++)
                 {
                     Check(row, col, 1, 0);
                 }
@@ -67,9 +70,9 @@ public class  InGamePresenter : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            for (var row = 0; row < 4; row++)
+            for (var row = 0; row < squareSize; row++)
             {
-                for (var col = 0; col < 4; col++)
+                for (var col = 0; col < squareSize; col++)
                 {
                     Check(row, col, -1, 0);
                 }
@@ -78,9 +81,9 @@ public class  InGamePresenter : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            for (var row = 0; row < 4; row++)
+            for (var row = 0; row < squareSize; row++)
             {
-                for (var col = 0; col < 4; col++)
+                for (var col = 0; col < squareSize; col++)
                 {
                     Check(row, col, 0, -1);
                 }
@@ -88,9 +91,9 @@ public class  InGamePresenter : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            for (var row = 4; row >= 0; row--)
+            for (var row = squareSize; row >= 0; row--)
             {
-                for (var col = 0; col < 4; col++)
+                for (var col = 0; col < squareSize; col++)
                 {
                     Check(row, col, 0, 1);
                 }
@@ -100,11 +103,11 @@ public class  InGamePresenter : MonoBehaviour
         if (isDirty)
         {
             CreateNewRandomCell();
-            for (var i = 0; i < 4; i++)
+            for (var i = 0; i < squareSize; i++)
             {
-                for (var j = 0; j < 4; j++)
+                for (var j = 0; j < squareSize; j++)
                 {
-                    cells[i * 4 + j].SetText(_stageState[i, j]);
+                    cells[i * squareSize + j].SetText(_stageState[i, j]);
                 }
             }
 
@@ -123,7 +126,7 @@ public class  InGamePresenter : MonoBehaviour
     private bool BorderCheck(int row, int column, int horizontal, int vertical)
     {
         // チェックマスが4x4外ならそれ以上処理を行わない
-        if (row < 0 || row >= 4 || column < 0 || column >= 4)
+        if (row < 0 || row >= squareSize || column < 0 || column >= squareSize)
         {
             return false;
         }
@@ -131,7 +134,7 @@ public class  InGamePresenter : MonoBehaviour
         // 移動先が4x4外ならそれ以上処理は行わない
         var nextRow = row + vertical;
         var nextCol = column + horizontal;
-        if (nextRow < 0 || nextRow >= 4 || nextCol < 0 || nextCol >= 4)
+        if (nextRow < 0 || nextRow >= squareSize || nextCol < 0 || nextCol >= squareSize)
         {
             return false;
         }
@@ -207,15 +210,15 @@ public class  InGamePresenter : MonoBehaviour
         {
             return;
         }
-        var row = Random.Range(0, 4);
-        var col = Random.Range(0, 4);
+        var row = Random.Range(0, squareSize);
+        var col = Random.Range(0, squareSize);
         while (_stageState[row, col] != 0)
         {
-            row = Random.Range(0, 4);
-            col = Random.Range(0, 4);
+            row = Random.Range(0, squareSize);
+            col = Random.Range(0, squareSize);
         }
 
-        _stageState[row, col] = Random.Range(0, 1f) < 0.5f ? 2 : 4;
+        _stageState[row, col] = Random.Range(0, 1f) < resultProbability ? generateCellNumber[0] : generateCellNumber[1];
     }
 
     private bool IsGameOver(int[,] stageState)
