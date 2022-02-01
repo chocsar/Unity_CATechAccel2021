@@ -26,7 +26,7 @@ public class InGamePresenter : MonoBehaviour
         inGameView = GetComponent<InGameView>();
 
         // Modelの値の変更を監視する
-        inGameModel.changeScore += inGameView.SetScore;
+        inGameModel.ChangeScore += inGameView.SetScore;
         
 
         // ステージの初期状態を生成

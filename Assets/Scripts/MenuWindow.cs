@@ -5,23 +5,19 @@ using UnityEngine.UI;
 
 public class MenuWindow : MonoBehaviour
 {
-    [SerializeField] Button CloseButton;
+    [SerializeField] Button closeButton;
 
-    /// <summary>
-    /// Windowを表示する
-    /// </summary>
+    // Windowを表示する
     public void OpenWindow()
     {
-        gameObject.SetActive(true);
+        this.gameObject.SetActive(true);
 
     }
 
-    /// <summary>
-    /// Windowを非表示にする
-    /// </summary>
+    // Windowを非表示にする
     public void CloseWindow()
     {
-        gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
     }
 
 }

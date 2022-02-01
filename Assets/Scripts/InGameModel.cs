@@ -5,16 +5,14 @@ public class InGameModel : MonoBehaviour
 {
 
     private int score;
-    public event Action<int> changeScore;
+    public event Action<int> ChangeScore;
 
-    /// <summary>
-    /// スコアの計算ロジック
-    /// </summary>
+    // スコアの計算ロジック
     /// <param name="cellValue">合成する数値マスの値</param>
     public void SetScore(int cellValue)
     {
         score += cellValue * 2;
-        changeScore(score);
+        ChangeScore(score);
     }
 
     public int GetScore(){ return score; }
