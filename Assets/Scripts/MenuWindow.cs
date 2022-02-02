@@ -7,14 +7,14 @@ public class MenuWindow : MonoBehaviour
 {
     [SerializeField] Button closeButton;
 
-    // Windowを表示する
+    /// <summary> /// Windowを表示する /// </summary>
     public void OpenWindow()
     {
         this.gameObject.SetActive(true);
 
     }
 
-    // Windowを非表示にする
+    /// <summary> /// Windowを非表示にする /// </summary>
     public void CloseWindow()
     {
         this.gameObject.SetActive(false);

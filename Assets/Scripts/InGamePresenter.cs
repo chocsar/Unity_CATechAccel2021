@@ -6,16 +6,16 @@ public class InGamePresenter : MonoBehaviour
     private InGameModel inGameModel;
     private InGameView inGameView;
 
-    // ステージの縦と横の長さを定義する
+    /// <summary> /// ステージの縦と横の長さを定義する /// </summary>
     private const int squareSize = 4;
-    // Cellで初期生成する値を入れた配列
+    /// <summary> /// Cellで初期生成する値を入れた配列 /// </summary>
     private int[] generateCellNumber = new int[2]{2,4};
-    // 確率の％を定義する
+    /// <summary> /// 確率の％を定義する /// </summary>
     private const float resultProbability = 0.5f;
     [SerializeField] private Cell[] cells;
     private readonly int[,] stageState = new int[squareSize, squareSize];
 
-    // 盤面の再描画を行う必要があるかのフラグ
+    /// <summary> /// 盤面の再描画を行う必要があるかのフラグ /// </summary>
     private bool isDirty;
 
 

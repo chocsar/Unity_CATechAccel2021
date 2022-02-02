@@ -7,7 +7,7 @@ public class InGameModel : MonoBehaviour
     private int score;
     public event Action<int> ChangeScore;
 
-    // スコアの計算ロジック
+    /// <summary> /// スコアの計算ロジック /// </summary>
     /// <param name="cellValue">合成する数値マスの値</param>
     public void SetScore(int cellValue)
     {
