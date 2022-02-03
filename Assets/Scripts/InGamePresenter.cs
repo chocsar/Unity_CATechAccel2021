@@ -11,7 +11,7 @@ public class InGamePresenter : MonoBehaviour
     /// <summary> /// 生成するCellの値を入れた配列 /// </summary>
     private int[] generateCellNumber = new int[2]{2,4};
     /// <summary> /// セルに2か4のどちらが生成されるかを決める確率を定義する /// </summary>
-    private const float resultProbability = 0.5f;
+    private const float probabilityOfSelectGeneratingCell = 0.5f;
     [SerializeField] private Cell[] cells;
     private readonly int[,] stageState = new int[squareSize, squareSize];
 
@@ -30,17 +30,17 @@ public class InGamePresenter : MonoBehaviour
         
 
         // ステージの初期状態を生成
-        for (var i = 0; i < squareSize; i++)
+        for (var row = 0; row < squareSize; row++)
         {
-            for (var j = 0; j < squareSize; j++)
+            for (var col = 0; col < squareSize; col++)
             {
-                stageState[i, j] = 0;
+                stageState[row, col] = 0;
             }
         }
         var posA = new Vector2(Random.Range(0, squareSize), Random.Range(0, squareSize));
         var posB = new Vector2((posA.x + Random.Range(1, squareSize-1)) % squareSize, (posA.y + Random.Range(1, squareSize-1)) % squareSize);
         stageState[(int)posA.x, (int)posA.y] = generateCellNumber[0];
-        stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < resultProbability ? generateCellNumber[0] : generateCellNumber[1];
+        stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < probabilityOfSelectGeneratingCell ? generateCellNumber[0] : generateCellNumber[1];
 
         // ステージの初期状態をViewに反映
         for (var i = 0; i < squareSize; i++)
@@ -104,11 +104,11 @@ public class InGamePresenter : MonoBehaviour
         if (isDirty)
         {
             CreateNewRandomCell();
-            for (var i = 0; i < squareSize; i++)
+            for (var row = 0; row < squareSize; row++)
             {
-                for (var j = 0; j < squareSize; j++)
+                for (var col = 0; col < squareSize; col++)
                 {
-                    cells[i * squareSize + j].SetText(stageState[i, j]);
+                    cells[row * squareSize + col].SetText(stageState[row, col]);
                 }
             }
 
@@ -124,17 +124,17 @@ public class InGamePresenter : MonoBehaviour
     
     
 
-    private bool BorderCheck(int row, int column, int horizontal, int vertical)
+    private bool BorderCheck(int row, int col, int horizontal, int vertical)
     {
         // チェックマスが4x4外ならそれ以上処理を行わない
-        if (row < 0 || row >= squareSize || column < 0 || column >= squareSize)
+        if (row < 0 || row >= squareSize || col < 0 || col >= squareSize)
         {
             return false;
         }
 
         // 移動先が4x4外ならそれ以上処理は行わない
         var nextRow = row + vertical;
-        var nextCol = column + horizontal;
+        var nextCol = col + horizontal;
         if (nextRow < 0 || nextRow >= squareSize || nextCol < 0 || nextCol >= squareSize)
         {
             return false;
@@ -143,43 +143,43 @@ public class InGamePresenter : MonoBehaviour
         return true;
     }
 
-    private void Check(int row, int column, int horizontal, int vertical)
+    private void Check(int row, int col, int horizontal, int vertical)
     {
         // 4x4の境界線チェック
-        if (BorderCheck(row, column, horizontal, vertical) == false)
+        if (BorderCheck(row, col, horizontal, vertical) == false)
         {
             return;
         }
         // 空欄マスは移動処理をしない
-        if (stageState[row, column] == 0)
+        if (stageState[row, col] == 0)
         {
             return;
         }
         // 移動可能条件を満たした場合のみ移動処理
-        Move(row, column, horizontal, vertical);
+        Move(row, col, horizontal, vertical);
     }
 
-    private void Move(int row, int column, int horizontal, int vertical)
+    private void Move(int row, int col, int horizontal, int vertical)
     {
         // 4x4境界線チェック
         // 再起呼び出し以降も毎回境界線チェックはするため冒頭で呼び出しておく
-        if (BorderCheck(row, column, horizontal, vertical) == false)
+        if (BorderCheck(row, col, horizontal, vertical) == false)
         {
             return;
         }
         // 移動先の位置を計算
         var nextRow = row + vertical;
-        var nextCol = column + horizontal;
+        var nextCol = col + horizontal;
 
         // 移動元と移動先の値を取得
-        var value = stageState[row, column];
+        var value = stageState[row, col];
         var nextValue = stageState[nextRow, nextCol];
 
         // 次の移動先のマスが0の場合は移動する
         if (nextValue == 0)
         {
             // 移動元のマスは空欄になるので0を埋める
-            stageState[row, column] = 0;
+            stageState[row, col] = 0;
 
             // 移動先のマスに移動元のマスの値を代入する
             stageState[nextRow, nextCol] = value;
@@ -190,7 +190,7 @@ public class InGamePresenter : MonoBehaviour
         // 同じ値のときは合成処理
         else if (value == nextValue)
         {
-            stageState[row, column] = 0;
+            stageState[row, col] = 0;
             stageState[nextRow, nextCol] = value * 2;
             inGameModel.SetScore(value);
             
@@ -219,7 +219,7 @@ public class InGamePresenter : MonoBehaviour
             col = Random.Range(0, squareSize);
         }
 
-        stageState[row, col] = Random.Range(0, 1f) < resultProbability ? generateCellNumber[0] : generateCellNumber[1];
+        stageState[row, col] = Random.Range(0, 1f) < probabilityOfSelectGeneratingCell ? generateCellNumber[0] : generateCellNumber[1];
     }
 
     private bool IsGameOver(int[,] stageState)
@@ -237,30 +237,30 @@ public class InGamePresenter : MonoBehaviour
         }
 
         // 合成可能なマスが一つでもあればゲームオーバーにはならない
-        for (var i = 0; i < stageState.GetLength(0); i++)
+        for (var row = 0; row < stageState.GetLength(0); row++)
         {
-            for (var j = 0; j < stageState.GetLength(1); j++)
+            for (var col = 0; col < stageState.GetLength(1); col++)
             {
-                var state = stageState[i, j];
+                var state = stageState[row, col];
                 var canMerge = false;
-                if (i > 0)
+                if (row > 0)
                 {
-                    canMerge |= state == stageState[i - 1, j];
+                    canMerge |= state == stageState[row - 1, col];
                 }
 
-                if (i < stageState.GetLength(0) - 1)
+                if (row < stageState.GetLength(0) - 1)
                 {
-                    canMerge |= state == stageState[i + 1, j];
+                    canMerge |= state == stageState[row + 1, col];
                 }
 
-                if (j > 0)
+                if (col > 0)
                 {
-                    canMerge |= state == stageState[i, j - 1];
+                    canMerge |= state == stageState[row, col - 1];
                 }
 
-                if (j < stageState.GetLength(1) - 1)
+                if (col < stageState.GetLength(1) - 1)
                 {
-                    canMerge |= state == stageState[i, j + 1];
+                    canMerge |= state == stageState[row, col + 1];
                 }
 
                 if (canMerge)
