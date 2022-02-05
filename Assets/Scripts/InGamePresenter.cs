@@ -9,7 +9,7 @@ public class InGamePresenter : MonoBehaviour
     /// <summary> /// 生成するCellの値を入れた配列 /// </summary>
     private int[] generateCellNumbers = new int[2]{2,4};
     [SerializeField] private Cell[] cells;
-    private readonly int[,] stageStates = new int[Const.SquareSize, Const.SquareSize];
+    private readonly int[,] stageState = new int[Const.SquareSize, Const.SquareSize];
 
     /// <summary> /// 盤面の再描画を行う必要があるかのフラグ /// </summary>
     private bool isDirty;
@@ -30,20 +30,20 @@ public class InGamePresenter : MonoBehaviour
         {
             for (var col = 0; col < Const.SquareSize; col++)
             {
-                stageStates[row, col] = 0;
+                stageState[row, col] = 0;
             }
         }
         var posA = new Vector2(Random.Range(0, Const.SquareSize), Random.Range(0, Const.SquareSize));
         var posB = new Vector2((posA.x + Random.Range(1, Const.SquareSize-1)) % Const.SquareSize, (posA.y + Random.Range(1, Const.SquareSize-1)) % Const.SquareSize);
-        stageStates[(int)posA.x, (int)posA.y] = generateCellNumbers[0];
-        stageStates[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
+        stageState[(int)posA.x, (int)posA.y] = generateCellNumbers[0];
+        stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
 
         // ステージの初期状態をViewに反映
         for (var i = 0; i < Const.SquareSize; i++)
         {
             for (var j = 0; j < Const.SquareSize; j++)
             {
-                cells[i * Const.SquareSize + j].SetText(stageStates[i, j]);
+                cells[i * Const.SquareSize + j].SetText(stageState[i, j]);
             }
         }
     }
@@ -104,11 +104,11 @@ public class InGamePresenter : MonoBehaviour
             {
                 for (var col = 0; col < Const.SquareSize; col++)
                 {
-                    cells[row * Const.SquareSize + col].SetText(stageStates[row, col]);
+                    cells[row * Const.SquareSize + col].SetText(stageState[row, col]);
                 }
             }
 
-            if (IsGameOver(stageStates))
+            if (IsGameOver(stageState))
             {
                 PlayerPrefs.SetInt("SCORE", inGameModel.GetScore());
                 LoadResultScene();
@@ -147,7 +147,7 @@ public class InGamePresenter : MonoBehaviour
             return;
         }
         // 空欄マスは移動処理をしない
-        if (stageStates[row, col] == 0)
+        if (stageState[row, col] == 0)
         {
             return;
         }
@@ -168,17 +168,17 @@ public class InGamePresenter : MonoBehaviour
         var nextCol = col + horizontal;
 
         // 移動元と移動先の値を取得
-        var value = stageStates[row, col];
-        var nextValue = stageStates[nextRow, nextCol];
+        var value = stageState[row, col];
+        var nextValue = stageState[nextRow, nextCol];
 
         // 次の移動先のマスが0の場合は移動する
         if (nextValue == 0)
         {
             // 移動元のマスは空欄になるので0を埋める
-            stageStates[row, col] = 0;
+            stageState[row, col] = 0;
 
             // 移動先のマスに移動元のマスの値を代入する
-            stageStates[nextRow, nextCol] = value;
+            stageState[nextRow, nextCol] = value;
 
             // 移動先のマスでさらに移動チェック
             MoveCell(nextRow, nextCol, horizontal, vertical);
@@ -186,8 +186,8 @@ public class InGamePresenter : MonoBehaviour
         // 同じ値のときは合成処理
         else if (value == nextValue)
         {
-            stageStates[row, col] = 0;
-            stageStates[nextRow, nextCol] = value * 2;
+            stageState[row, col] = 0;
+            stageState[nextRow, nextCol] = value * 2;
             inGameModel.SetScore(value);
             
         }
@@ -203,19 +203,19 @@ public class InGamePresenter : MonoBehaviour
     private void CreateNewRandomCell()
     {
         // ゲーム終了時はスポーンしない
-        if (IsGameOver(stageStates))
+        if (IsGameOver(stageState))
         {
             return;
         }
         var row = Random.Range(0, Const.SquareSize);
         var col = Random.Range(0, Const.SquareSize);
-        while (stageStates[row, col] != 0)
+        while (stageState[row, col] != 0)
         {
             row = Random.Range(0, Const.SquareSize);
             col = Random.Range(0, Const.SquareSize);
         }
 
-        stageStates[row, col] = Random.Range(0, 1f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
+        stageState[row, col] = Random.Range(0, 1f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
     }
 
     private bool IsGameOver(int[,] stageState)
