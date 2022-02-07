@@ -39,13 +39,7 @@ public class InGamePresenter : MonoBehaviour
         stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
 
         // ステージの初期状態をViewに反映
-        for (var i = 0; i < Const.SquareSize; i++)
-        {
-            for (var j = 0; j < Const.SquareSize; j++)
-            {
-                cells[i * Const.SquareSize + j].SetText(stageState[i, j]);
-            }
-        }
+        ReflectStageView();
     }
 
     
@@ -100,13 +94,7 @@ public class InGamePresenter : MonoBehaviour
         if (isDirty)
         {
             CreateNewRandomCell();
-            for (var row = 0; row < Const.SquareSize; row++)
-            {
-                for (var col = 0; col < Const.SquareSize; col++)
-                {
-                    cells[row * Const.SquareSize + col].SetText(stageState[row, col]);
-                }
-            }
+            ReflectStageView();
 
             if (IsGameOver(stageState))
             {
@@ -216,6 +204,20 @@ public class InGamePresenter : MonoBehaviour
         }
 
         stageState[row, col] = Random.Range(0, 1f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
+    }
+
+    /// <summary>
+    /// ステージの初期状態をViewに反映
+    /// </summary>
+    private void ReflectStageView()
+    {
+        for (var row = 0; row < Const.SquareSize; row++)
+        {
+            for (var col = 0; col < Const.SquareSize; col++)
+            {
+                cells[row * Const.SquareSize + col].SetText(stageState[row, col]);
+            }
+        }
     }
 
     private bool IsGameOver(int[,] stageState)
