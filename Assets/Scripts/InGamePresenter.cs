@@ -7,7 +7,7 @@ public class InGamePresenter : MonoBehaviour
     private InGameView inGameView;
 
     /// <summary> /// 生成するCellの値を入れた配列 /// </summary>
-    private int[] generateCellNumber = new int[2]{2,4};
+    private int[] generateCellNumbers = new int[2]{2,4};
     [SerializeField] private Cell[] cells;
     private readonly int[,] stageState = new int[Const.SquareSize, Const.SquareSize];
 
@@ -35,8 +35,8 @@ public class InGamePresenter : MonoBehaviour
         }
         var posA = new Vector2(Random.Range(0, Const.SquareSize), Random.Range(0, Const.SquareSize));
         var posB = new Vector2((posA.x + Random.Range(1, Const.SquareSize-1)) % Const.SquareSize, (posA.y + Random.Range(1, Const.SquareSize-1)) % Const.SquareSize);
-        stageState[(int)posA.x, (int)posA.y] = generateCellNumber[0];
-        stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumber[0] : generateCellNumber[1];
+        stageState[(int)posA.x, (int)posA.y] = generateCellNumbers[0];
+        stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
 
         // ステージの初期状態をViewに反映
         for (var i = 0; i < Const.SquareSize; i++)
@@ -61,7 +61,7 @@ public class InGamePresenter : MonoBehaviour
             {
                 for (var row = 0; row < Const.SquareSize; row++)
                 {
-                    Check(row, col, 1, 0);
+                    CheckCell(row, col, 1, 0);
                 }
             }
         }
@@ -71,7 +71,7 @@ public class InGamePresenter : MonoBehaviour
             {
                 for (var col = 0; col < Const.SquareSize; col++)
                 {
-                    Check(row, col, -1, 0);
+                    CheckCell(row, col, -1, 0);
                 }
             }
 
@@ -82,7 +82,7 @@ public class InGamePresenter : MonoBehaviour
             {
                 for (var col = 0; col < Const.SquareSize; col++)
                 {
-                    Check(row, col, 0, -1);
+                    CheckCell(row, col, 0, -1);
                 }
             }
         }
@@ -92,7 +92,7 @@ public class InGamePresenter : MonoBehaviour
             {
                 for (var col = 0; col < Const.SquareSize; col++)
                 {
-                    Check(row, col, 0, 1);
+                    CheckCell(row, col, 0, 1);
                 }
             }
         }
@@ -120,7 +120,7 @@ public class InGamePresenter : MonoBehaviour
     
     
 
-    private bool BorderCheck(int row, int col, int horizontal, int vertical)
+    private bool CheckBorder(int row, int col, int horizontal, int vertical)
     {
         // チェックマスが4x4外ならそれ以上処理を行わない
         if (row < 0 || row >= Const.SquareSize || col < 0 || col >= Const.SquareSize)
@@ -139,10 +139,10 @@ public class InGamePresenter : MonoBehaviour
         return true;
     }
 
-    private void Check(int row, int col, int horizontal, int vertical)
+    private void CheckCell(int row, int col, int horizontal, int vertical)
     {
         // 4x4の境界線チェック
-        if (BorderCheck(row, col, horizontal, vertical) == false)
+        if (CheckBorder(row, col, horizontal, vertical) == false)
         {
             return;
         }
@@ -152,14 +152,14 @@ public class InGamePresenter : MonoBehaviour
             return;
         }
         // 移動可能条件を満たした場合のみ移動処理
-        Move(row, col, horizontal, vertical);
+        MoveCell(row, col, horizontal, vertical);
     }
 
-    private void Move(int row, int col, int horizontal, int vertical)
+    private void MoveCell(int row, int col, int horizontal, int vertical)
     {
         // 4x4境界線チェック
         // 再起呼び出し以降も毎回境界線チェックはするため冒頭で呼び出しておく
-        if (BorderCheck(row, col, horizontal, vertical) == false)
+        if (CheckBorder(row, col, horizontal, vertical) == false)
         {
             return;
         }
@@ -181,7 +181,7 @@ public class InGamePresenter : MonoBehaviour
             stageState[nextRow, nextCol] = value;
 
             // 移動先のマスでさらに移動チェック
-            Move(nextRow, nextCol, horizontal, vertical);
+            MoveCell(nextRow, nextCol, horizontal, vertical);
         }
         // 同じ値のときは合成処理
         else if (value == nextValue)
@@ -215,7 +215,7 @@ public class InGamePresenter : MonoBehaviour
             col = Random.Range(0, Const.SquareSize);
         }
 
-        stageState[row, col] = Random.Range(0, 1f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumber[0] : generateCellNumber[1];
+        stageState[row, col] = Random.Range(0, 1f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
     }
 
     private bool IsGameOver(int[,] stageState)
