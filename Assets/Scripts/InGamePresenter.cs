@@ -148,6 +148,10 @@ public class InGamePresenter : MonoBehaviour
         isDirty = true;
     }
 
+
+    /// <summary>
+    /// セルの合成処理
+    /// </summary>
     private void SynthesisCell(int row, int col, int nextRow, int nextCol, int value)
     {
         stageState[row, col] = 0;
@@ -176,7 +180,7 @@ public class InGamePresenter : MonoBehaviour
     /// <summary>
     /// ステージの初期状態をViewに反映
     /// </summary>
-    private void ReflectStageView()
+    private void ApplyStageView()
     {
         for (var row = 0; row < Const.SquareSize; row++)
         {
