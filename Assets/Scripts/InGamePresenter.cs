@@ -28,7 +28,7 @@ public class InGamePresenter : MonoBehaviour
         // ステージの初期状態を生成
         GenerateInitializingStage();
         // ステージの初期状態をViewに反映
-        ReflectStageView();
+        ApplyStageView();
     }
 
     
@@ -58,7 +58,7 @@ public class InGamePresenter : MonoBehaviour
         if (isDirty)
         {
             CreateNewRandomCell();
-            ReflectStageView();
+            ApplyStageView();
 
             if (IsGameOver(stageState))
             {
