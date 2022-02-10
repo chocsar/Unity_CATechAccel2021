@@ -5,7 +5,6 @@ public class InGamePresenter : MonoBehaviour
     private InGameModel inGameModel;
     private InGameView inGameView;
 
-    private SceneController sceneController;
     /// <summary> /// 生成するCellの値を入れた配列 /// </summary>
     private int[] generateCellNumbers = new int[2]{2,4};
     [SerializeField] private Cell[] cells;
@@ -21,7 +20,6 @@ public class InGamePresenter : MonoBehaviour
         inGameModel = GetComponent<InGameModel>();
         inGameView = GetComponent<InGameView>();
 
-        sceneController = GameObject.Find("Manager").GetComponent<SceneController>();
         // Modelの値の変更を監視する
         inGameModel.ChangeScore += inGameView.SetScore;
 
@@ -245,7 +243,7 @@ public class InGamePresenter : MonoBehaviour
 
     private void LoadResultScene()
     {
-        sceneController.SceneLoader("ResultScene");
+        SceneController.Instance.SceneLoader("ResultScene");
     }
 
     /// <summary>

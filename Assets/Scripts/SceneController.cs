@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneController : MonoBehaviour
+public class SceneController : SingletonMonoBehaviour<SceneController>
 {
-    // Start is called before the first frame update
-    void Start()
+    override protected void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        // 子クラスでAwakeを使う場合は
+        // 必ず親クラスのAwakeをCallして
+        // 複数のGameObjectにアタッチされないようにします.
+        base.Awake();
     }
 
     public void SceneLoader(string sceneName)
