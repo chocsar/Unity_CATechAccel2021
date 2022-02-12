@@ -40,19 +40,19 @@ public class InGamePresenter : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            MoveCellsRight(1, 0);
+            MoveCellsRight();
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            MoveCellsLeft(-1, 0);
+            MoveCellsLeft();
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            MoveCellsUp(0, -1);
+            MoveCellsUp();
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            MoveCellsDown(0, 1);
+            MoveCellsDown();
         }
 
         if (isDirty)
@@ -268,61 +268,61 @@ public class InGamePresenter : MonoBehaviour
     /// <summary>
     /// 矢印キーが押された際に実行される処理
     /// </summary>
-    private void MoveCellsRight(int horizontal, int vertical)
+    private void MoveCellsRight()
     {
         for (var col = Const.SquareSize; col >= 0; col--)
         {
             for (var row = 0; row < Const.SquareSize; row++)
             {
-                if (CheckCell(row, col, horizontal, vertical))
+                if (CheckCell(row, col, 1, 0))
                 {
                     // 移動可能条件を満たした場合のみ移動処理
-                    MoveCell(row, col, horizontal, vertical);
+                    MoveCell(row, col, 1, 0);
                 }
             }
         }
     }
 
-    private void MoveCellsLeft(int horizontal, int vertical)
+    private void MoveCellsLeft()
     {
         for (var row = 0; row < Const.SquareSize; row++)
         {
             for (var col = 0; col < Const.SquareSize; col++)
             {
-                if (CheckCell(row, col, horizontal, vertical))
+                if (CheckCell(row, col, -1, 0))
                 {
                     // 移動可能条件を満たした場合のみ移動処理
-                    MoveCell(row, col, horizontal, vertical);
+                    MoveCell(row, col, -1, 0);
                 }
             }
         }
     }
 
-    private void MoveCellsUp(int horizontal, int vertical)
+    private void MoveCellsUp()
     {
         for (var row = 0; row < Const.SquareSize; row++)
         {
             for (var col = 0; col < Const.SquareSize; col++)
             {
-                if (CheckCell(row, col, horizontal, vertical))
+                if (CheckCell(row, col, 0, -1))
                 {
                     // 移動可能条件を満たした場合のみ移動処理
-                    MoveCell(row, col, horizontal, vertical);
+                    MoveCell(row, col, 0, -1);
                 }
             }
         }
     }
 
-    private void MoveCellsDown(int horizontal, int vertical)
+    private void MoveCellsDown()
     {
         for (var row = Const.SquareSize; row >= 0; row--)
         {
             for (var col = 0; col < Const.SquareSize; col++)
             {
-                if (CheckCell(row, col, horizontal, vertical))
+                if (CheckCell(row, col, 0, 1))
                 {
                     // 移動可能条件を満たした場合のみ移動処理
-                    MoveCell(row, col, horizontal, vertical);
+                    MoveCell(row, col, 0, 1);
                 }
             }
         }
