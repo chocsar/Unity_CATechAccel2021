@@ -61,7 +61,7 @@ public class InGamePresenter : MonoBehaviour
 
             if (IsGameOver(stageState))
             {
-                PlayerPrefs.SetInt("SCORE", inGameModel.GetScore());
+                ScoreController.Instance.SaveScore(inGameModel.GetScore());
                 LoadResultScene();
             }
         }
@@ -243,7 +243,7 @@ public class InGamePresenter : MonoBehaviour
 
     private void LoadResultScene()
     {
-        SceneController.Instance.SceneLoader("ResultScene");
+        SceneController.Instance.LoadScene(Const.SceneNames.ResultScene.ToString());
     }
 
     /// <summary>

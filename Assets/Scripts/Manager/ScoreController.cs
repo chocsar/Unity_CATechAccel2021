@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class SceneController : SingletonMonoBehaviour<SceneController>
+public class ScoreController : SingletonMonoBehaviour<ScoreController>
 {
-    override protected void Awake()
+    void Awake()
     {
         // 子クラスでAwakeを使う場合は
         // 必ず親クラスのAwakeをCallして
@@ -13,8 +12,13 @@ public class SceneController : SingletonMonoBehaviour<SceneController>
         base.Awake();
     }
 
-    public void SceneLoader(string sceneName)
+    public void SaveScore(int score)
     {
-        SceneManager.LoadScene(sceneName);
+        PlayerPrefs.SetInt("SCORE", score);
+    }
+
+    public int LoadScore()
+    {
+        return PlayerPrefs.GetInt("SCORE", 0);
     }
 }

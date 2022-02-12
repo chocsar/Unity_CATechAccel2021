@@ -9,7 +9,7 @@ public class Result : MonoBehaviour
 
     private void Start()
     {
-        resultText.text = PlayerPrefs.GetInt("SCORE", 0).ToString();
+        resultText.text = ScoreController.Instance.LoadScore().ToString();
     }
 
     public void OnClickRetryButton()
