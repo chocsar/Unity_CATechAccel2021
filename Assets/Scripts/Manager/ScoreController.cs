@@ -4,21 +4,19 @@ using UnityEngine;
 
 public class ScoreController : SingletonMonoBehaviour<ScoreController>
 {
-    void Awake()
-    {
-        // 子クラスでAwakeを使う場合は
-        // 必ず親クラスのAwakeをCallして
-        // 複数のGameObjectにアタッチされないようにします.
-        base.Awake();
-    }
-
+    /// <summary>
+    /// スコアの保存をする
+    /// </summary>
     public void SaveScore(int score)
     {
-        PlayerPrefs.SetInt("SCORE", score);
+        PlayerPrefs.SetInt(Const.SaveKeyNames.Score.ToString(), score);
     }
 
+    /// <summary>
+    /// 保存されたスコアを取り出して値を返す
+    /// </summary>
     public int LoadScore()
     {
-        return PlayerPrefs.GetInt("SCORE", 0);
+        return PlayerPrefs.GetInt(Const.SaveKeyNames.Score.ToString(), 0);
     }
 }

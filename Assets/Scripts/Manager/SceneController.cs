@@ -5,16 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : SingletonMonoBehaviour<SceneController>
 {
-    void Awake()
+    public void LoadScene(Const.SceneNames sceneName)
     {
-        // 子クラスでAwakeを使う場合は
-        // 必ず親クラスのAwakeをCallして
-        // 複数のGameObjectにアタッチされないようにします.
-        base.Awake();
-    }
-
-    public void LoadScene(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(sceneName.ToString());
     }
 }
