@@ -25,7 +25,7 @@ public class InGamePresenter : MonoBehaviour
 
 
         // ステージの初期状態を生成
-        GenerateInitializingStage();
+        InitializeStage();
         // ステージの初期状態をViewに反映
         ApplyStageView();
     }
@@ -39,19 +39,19 @@ public class InGamePresenter : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            InputMoveCell(1, 0);
+            MoveCellsRight();
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            InputMoveCell(-1, 0);
+            MoveCellsLeft();
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            InputMoveCell(0, -1);
+            MoveCellsUp();
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            InputMoveCell(0, 1);
+            MoveCellsDown();
         }
 
         if (isDirty)
@@ -136,7 +136,7 @@ public class InGamePresenter : MonoBehaviour
         // 同じ値のときは合成処理
         else if (value == nextValue)
         {
-            SynthesisCell(row, col, nextRow, nextCol, value);
+            MergeCell(row, col, nextRow, nextCol, value);
         }
         // 異なる値のときは移動処理を終了
         else if (value != nextValue)
@@ -151,7 +151,7 @@ public class InGamePresenter : MonoBehaviour
     /// <summary>
     /// セルの合成処理
     /// </summary>
-    private void SynthesisCell(int row, int col, int nextRow, int nextCol, int value)
+    private void MergeCell(int row, int col, int nextRow, int nextCol, int value)
     {
         stageState[row, col] = 0;
         stageState[nextRow, nextCol] = value * 2;
@@ -249,7 +249,7 @@ public class InGamePresenter : MonoBehaviour
     /// <summary>
     /// ステージの初期状態を生成
     /// </summary>
-    private void GenerateInitializingStage()
+    private void InitializeStage()
     {
         for (var row = 0; row < Const.SquareSize; row++)
         {
@@ -267,20 +267,66 @@ public class InGamePresenter : MonoBehaviour
     /// <summary>
     /// 矢印キーが押された際に実行される処理
     /// </summary>
-    private void InputMoveCell(int horizontal, int vertical)
+    private void MoveCellsRight()
+    {
+        for (var col = Const.SquareSize; col >= 0; col--)
+        {
+            for (var row = 0; row < Const.SquareSize; row++)
+            {
+                if (CheckCell(row, col, 1, 0))
+                {
+                    // 移動可能条件を満たした場合のみ移動処理
+                    MoveCell(row, col, 1, 0);
+                }
+            }
+        }
+    }
+
+    private void MoveCellsLeft()
     {
         for (var row = 0; row < Const.SquareSize; row++)
         {
             for (var col = 0; col < Const.SquareSize; col++)
             {
-                if(CheckCell(row, col, horizontal, vertical) == true)
+                if (CheckCell(row, col, -1, 0))
                 {
                     // 移動可能条件を満たした場合のみ移動処理
-                    MoveCell(row, col, horizontal, vertical);
+                    MoveCell(row, col, -1, 0);
                 }
             }
         }
     }
+
+    private void MoveCellsUp()
+    {
+        for (var row = 0; row < Const.SquareSize; row++)
+        {
+            for (var col = 0; col < Const.SquareSize; col++)
+            {
+                if (CheckCell(row, col, 0, -1))
+                {
+                    // 移動可能条件を満たした場合のみ移動処理
+                    MoveCell(row, col, 0, -1);
+                }
+            }
+        }
+    }
+
+    private void MoveCellsDown()
+    {
+        for (var row = Const.SquareSize; row >= 0; row--)
+        {
+            for (var col = 0; col < Const.SquareSize; col++)
+            {
+                if (CheckCell(row, col, 0, 1))
+                {
+                    // 移動可能条件を満たした場合のみ移動処理
+                    MoveCell(row, col, 0, 1);
+                }
+            }
+        }
+    }
+
 
 
 }
