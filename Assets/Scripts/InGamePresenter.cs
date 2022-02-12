@@ -23,29 +23,12 @@ public class InGamePresenter : MonoBehaviour
 
         // Modelの値の変更を監視する
         inGameModel.ChangeScore += inGameView.SetScore;
-        
+
 
         // ステージの初期状態を生成
-        for (var row = 0; row < Const.SquareSize; row++)
-        {
-            for (var col = 0; col < Const.SquareSize; col++)
-            {
-                stageState[row, col] = 0;
-            }
-        }
-        var posA = new Vector2(Random.Range(0, Const.SquareSize), Random.Range(0, Const.SquareSize));
-        var posB = new Vector2((posA.x + Random.Range(1, Const.SquareSize-1)) % Const.SquareSize, (posA.y + Random.Range(1, Const.SquareSize-1)) % Const.SquareSize);
-        stageState[(int)posA.x, (int)posA.y] = generateCellNumbers[0];
-        stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
-
+        InitializeStage();
         // ステージの初期状態をViewに反映
-        for (var i = 0; i < Const.SquareSize; i++)
-        {
-            for (var j = 0; j < Const.SquareSize; j++)
-            {
-                cells[i * Const.SquareSize + j].SetText(stageState[i, j]);
-            }
-        }
+        ApplyStageView();
     }
 
     
@@ -57,56 +40,25 @@ public class InGamePresenter : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            for (var col = Const.SquareSize; col >= 0; col--)
-            {
-                for (var row = 0; row < Const.SquareSize; row++)
-                {
-                    CheckCell(row, col, 1, 0);
-                }
-            }
+            MoveCellsRight();
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            for (var row = 0; row < Const.SquareSize; row++)
-            {
-                for (var col = 0; col < Const.SquareSize; col++)
-                {
-                    CheckCell(row, col, -1, 0);
-                }
-            }
-
+            MoveCellsLeft();
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            for (var row = 0; row < Const.SquareSize; row++)
-            {
-                for (var col = 0; col < Const.SquareSize; col++)
-                {
-                    CheckCell(row, col, 0, -1);
-                }
-            }
+            MoveCellsUp();
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            for (var row = Const.SquareSize; row >= 0; row--)
-            {
-                for (var col = 0; col < Const.SquareSize; col++)
-                {
-                    CheckCell(row, col, 0, 1);
-                }
-            }
+            MoveCellsDown();
         }
 
         if (isDirty)
         {
             CreateNewRandomCell();
-            for (var row = 0; row < Const.SquareSize; row++)
-            {
-                for (var col = 0; col < Const.SquareSize; col++)
-                {
-                    cells[row * Const.SquareSize + col].SetText(stageState[row, col]);
-                }
-            }
+            ApplyStageView();
 
             if (IsGameOver(stageState))
             {
@@ -139,20 +91,19 @@ public class InGamePresenter : MonoBehaviour
         return true;
     }
 
-    private void CheckCell(int row, int col, int horizontal, int vertical)
+    private bool CheckCell(int row, int col, int horizontal, int vertical)
     {
         // 4x4の境界線チェック
         if (CheckBorder(row, col, horizontal, vertical) == false)
         {
-            return;
+            return false;
         }
         // 空欄マスは移動処理をしない
         if (stageState[row, col] == 0)
         {
-            return;
+            return false;
         }
-        // 移動可能条件を満たした場合のみ移動処理
-        MoveCell(row, col, horizontal, vertical);
+        return true;
     }
 
     private void MoveCell(int row, int col, int horizontal, int vertical)
@@ -186,10 +137,7 @@ public class InGamePresenter : MonoBehaviour
         // 同じ値のときは合成処理
         else if (value == nextValue)
         {
-            stageState[row, col] = 0;
-            stageState[nextRow, nextCol] = value * 2;
-            inGameModel.SetScore(value);
-            
+            MergeCell(row, col, nextRow, nextCol, value);
         }
         // 異なる値のときは移動処理を終了
         else if (value != nextValue)
@@ -198,6 +146,17 @@ public class InGamePresenter : MonoBehaviour
         }
 
         isDirty = true;
+    }
+
+
+    /// <summary>
+    /// セルの合成処理
+    /// </summary>
+    private void MergeCell(int row, int col, int nextRow, int nextCol, int value)
+    {
+        stageState[row, col] = 0;
+        stageState[nextRow, nextCol] = value * 2;
+        inGameModel.SetScore(value);
     }
 
     private void CreateNewRandomCell()
@@ -216,6 +175,20 @@ public class InGamePresenter : MonoBehaviour
         }
 
         stageState[row, col] = Random.Range(0, 1f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
+    }
+
+    /// <summary>
+    /// ステージの初期状態をViewに反映
+    /// </summary>
+    private void ApplyStageView()
+    {
+        for (var row = 0; row < Const.SquareSize; row++)
+        {
+            for (var col = 0; col < Const.SquareSize; col++)
+            {
+                cells[row * Const.SquareSize + col].SetText(stageState[row, col]);
+            }
+        }
     }
 
     private bool IsGameOver(int[,] stageState)
@@ -273,5 +246,88 @@ public class InGamePresenter : MonoBehaviour
     {
         SceneManager.LoadScene("ResultScene");
     }
+
+    /// <summary>
+    /// ステージの初期状態を生成
+    /// </summary>
+    private void InitializeStage()
+    {
+        for (var row = 0; row < Const.SquareSize; row++)
+        {
+            for (var col = 0; col < Const.SquareSize; col++)
+            {
+                stageState[row, col] = 0;
+            }
+        }
+        var posA = new Vector2(Random.Range(0, Const.SquareSize), Random.Range(0, Const.SquareSize));
+        var posB = new Vector2((posA.x + Random.Range(1, Const.SquareSize - 1)) % Const.SquareSize, (posA.y + Random.Range(1, Const.SquareSize - 1)) % Const.SquareSize);
+        stageState[(int)posA.x, (int)posA.y] = generateCellNumbers[0];
+        stageState[(int)posB.x, (int)posB.y] = Random.Range(0, 1.0f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
+    }
+
+    /// <summary>
+    /// 矢印キーが押された際に実行される処理
+    /// </summary>
+    private void MoveCellsRight()
+    {
+        for (var col = Const.SquareSize; col >= 0; col--)
+        {
+            for (var row = 0; row < Const.SquareSize; row++)
+            {
+                if (CheckCell(row, col, 1, 0))
+                {
+                    // 移動可能条件を満たした場合のみ移動処理
+                    MoveCell(row, col, 1, 0);
+                }
+            }
+        }
+    }
+
+    private void MoveCellsLeft()
+    {
+        for (var row = 0; row < Const.SquareSize; row++)
+        {
+            for (var col = 0; col < Const.SquareSize; col++)
+            {
+                if (CheckCell(row, col, -1, 0))
+                {
+                    // 移動可能条件を満たした場合のみ移動処理
+                    MoveCell(row, col, -1, 0);
+                }
+            }
+        }
+    }
+
+    private void MoveCellsUp()
+    {
+        for (var row = 0; row < Const.SquareSize; row++)
+        {
+            for (var col = 0; col < Const.SquareSize; col++)
+            {
+                if (CheckCell(row, col, 0, -1))
+                {
+                    // 移動可能条件を満たした場合のみ移動処理
+                    MoveCell(row, col, 0, -1);
+                }
+            }
+        }
+    }
+
+    private void MoveCellsDown()
+    {
+        for (var row = Const.SquareSize; row >= 0; row--)
+        {
+            for (var col = 0; col < Const.SquareSize; col++)
+            {
+                if (CheckCell(row, col, 0, 1))
+                {
+                    // 移動可能条件を満たした場合のみ移動処理
+                    MoveCell(row, col, 0, 1);
+                }
+            }
+        }
+    }
+
+
 
 }
