@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class InGamePresenter : MonoBehaviour
 {
@@ -62,7 +61,7 @@ public class InGamePresenter : MonoBehaviour
 
             if (IsGameOver(stageState))
             {
-                PlayerPrefs.SetInt("SCORE", inGameModel.GetScore());
+                ScoreController.Instance.SaveScore(inGameModel.GetScore());
                 LoadResultScene();
             }
         }
@@ -244,7 +243,7 @@ public class InGamePresenter : MonoBehaviour
 
     private void LoadResultScene()
     {
-        SceneManager.LoadScene("ResultScene");
+        SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
     }
 
     /// <summary>
