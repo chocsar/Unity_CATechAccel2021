@@ -14,6 +14,6 @@ public class Result : MonoBehaviour
 
     public void OnClickRetryButton()
     {
-        SceneController.Instance.LoadScene(Const.SceneNames.InGameScene);
+        SceneController.Instance.LoadScene(SceneController.SceneNames.InGameScene);
     }
 }

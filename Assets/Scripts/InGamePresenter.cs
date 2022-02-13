@@ -243,7 +243,7 @@ public class InGamePresenter : MonoBehaviour
 
     private void LoadResultScene()
     {
-        SceneController.Instance.LoadScene(Const.SceneNames.ResultScene);
+        SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
     }
 
     /// <summary>
