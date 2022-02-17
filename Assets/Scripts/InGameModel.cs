@@ -5,8 +5,8 @@ public class InGameModel : MonoBehaviour
 {
 
     private int score;
-    public event Action<int> ChangeScore;
-    public event Action<int[,]> ApplyStageView;
+    public event Action<int> OnChangeScore;
+    public event Action<int[,]> OnChangeStageState;
 
     /// <summary> /// 生成するCellの値を入れた配列 /// </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
@@ -21,18 +21,19 @@ public class InGameModel : MonoBehaviour
         // ステージの初期状態を生成
         InitializeStage();
         // ステージの初期状態をViewに反映
-        ApplyStageView(stageState);
+        OnChangeStageState?.Invoke(stageState);
     }
-
 
     private void Update()
     {
-
-
-        if (isDirty)
+        if (!isDirty)
+        {
+            return;
+        }
+        else
         {
             CreateNewRandomCell();
-            ApplyStageView(stageState);
+            OnChangeStageState?.Invoke(stageState);
 
             if (IsGameOver(stageState))
             {
@@ -40,13 +41,12 @@ public class InGameModel : MonoBehaviour
                 LoadResultScene();
             }
             isDirty = false;
-
         }
-
     }
 
-
-
+    /// <summary>
+    /// ステージの境界線をチェックして処理の継続をするか判定する
+    /// </summary>
     private bool CheckBorder(int row, int col, int horizontal, int vertical)
     {
         // チェックマスが4x4外ならそれ以上処理を行わない
@@ -66,6 +66,9 @@ public class InGameModel : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// セル自体が入力された矢印キーの移動方向へ移動できるか確認
+    /// </summary>
     private bool CheckCell(int row, int col, int horizontal, int vertical)
     {
         // 4x4の境界線チェック
@@ -81,6 +84,9 @@ public class InGameModel : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// セル自体が入力された矢印キーの移動方向へ移動させる
+    /// </summary>
     private void MoveCell(int row, int col, int horizontal, int vertical)
     {
         // 4x4境界線チェック
@@ -123,7 +129,6 @@ public class InGameModel : MonoBehaviour
         isDirty = true;
     }
 
-
     /// <summary>
     /// セルの合成処理
     /// </summary>
@@ -134,6 +139,9 @@ public class InGameModel : MonoBehaviour
         SetScore(value);
     }
 
+    /// <summary>
+    /// 新しい「2,4」のセルを空いたセルへ生成させる
+    /// </summary>
     private void CreateNewRandomCell()
     {
         // ゲーム終了時はスポーンしない
@@ -152,7 +160,9 @@ public class InGameModel : MonoBehaviour
         stageState[row, col] = UnityEngine.Random.Range(0, 1f) < Const.ProbabilityOfSelectGeneratingCell ? generateCellNumbers[0] : generateCellNumbers[1];
     }
 
-
+    /// <summary>
+    /// ゲームオーバー状態か判定する
+    /// </summary>
     private bool IsGameOver(int[,] stageState)
     {
         // 空いている場所があればゲームオーバーにはならない
@@ -204,6 +214,9 @@ public class InGameModel : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// ResultSceneをロードする
+    /// </summary>
     private void LoadResultScene()
     {
         SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
@@ -228,7 +241,7 @@ public class InGameModel : MonoBehaviour
     }
 
     /// <summary>
-    /// 矢印キーが押された際に実行される処理
+    /// 右矢印キーが押された際に実行される処理
     /// </summary>
     public void MoveCellsRight()
     {
@@ -245,6 +258,9 @@ public class InGameModel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 左矢印キーが押された際に実行される処理
+    /// </summary>
     public void MoveCellsLeft()
     {
         for (var row = 0; row < Const.SquareSize; row++)
@@ -260,6 +276,9 @@ public class InGameModel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 上矢印キーが押された際に実行される処理
+    /// </summary>
     public void MoveCellsUp()
     {
         for (var row = 0; row < Const.SquareSize; row++)
@@ -275,6 +294,9 @@ public class InGameModel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 下矢印キーが押された際に実行される処理
+    /// </summary>
     public void MoveCellsDown()
     {
         for (var row = Const.SquareSize; row >= 0; row--)
@@ -290,7 +312,6 @@ public class InGameModel : MonoBehaviour
         }
     }
 
-
     /// <summary> 
     /// スコアの計算ロジック
     /// <param name="cellValue">合成する数値マスの値</param>
@@ -298,11 +319,9 @@ public class InGameModel : MonoBehaviour
     public void SetScore(int cellValue)
     {
         score += cellValue * 2;
-        ChangeScore(score);
+        OnChangeScore?.Invoke(score);
     }
 
     public int GetScore(){ return score; }
-
-
 
 }

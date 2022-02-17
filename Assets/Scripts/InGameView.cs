@@ -15,19 +15,19 @@ public class InGameView : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            MoveCellsRight();
+            MoveCellsRight?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            MoveCellsLeft();
+            MoveCellsLeft?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            MoveCellsUp();
+            MoveCellsUp?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            MoveCellsDown();
+            MoveCellsDown?.Invoke();
         }
 
     }

@@ -13,9 +13,9 @@ public class InGamePresenter : MonoBehaviour
 
         // Model → View
         // Modelの値の変更を監視する
-        inGameModel.ChangeScore += inGameView.SetScore;
+        inGameModel.OnChangeScore += inGameView.SetScore;
         // ステージのCell状の値の変更を監視する
-        inGameModel.ApplyStageView += inGameView.ApplyStageView;
+        inGameModel.OnChangeStageState += inGameView.ApplyStageView;
 
         // View → Model
         // Viewの右矢印が押されているかを監視する
