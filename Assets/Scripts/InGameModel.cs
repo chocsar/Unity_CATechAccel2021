@@ -3,18 +3,18 @@ using System;
 
 public class InGameModel : MonoBehaviour
 {
-    /// <summary> /// 変数の宣言 /// </summary>
+    /// <summary> 変数の宣言 </summary>
     private int score;
-    /// <summary> /// 生成するCellの値を入れた配列 /// </summary>
+    /// <summary> 生成するCellの値を入れた配列 </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
     private readonly int[,] stageState = new int[Const.SquareSize, Const.SquareSize];
-    /// <summary> /// 盤面の再描画を行う必要があるかのフラグ /// </summary>
+    /// <summary> 盤面の再描画を行う必要があるかのフラグ </summary>
     private bool isDirty;
 
-    /// <summary> /// C# Action /// </summary>
+    /// <summary> C# Action </summary>
     public event Action<int> OnChangeScore;
     public event Action<int[,]> OnChangeStageState;
-    public event Action OnLoadResultScene;
+    public event Action OnGameOver;
 
     private void Start()
     {
@@ -105,6 +105,7 @@ public class InGameModel : MonoBehaviour
         {
             return;
         }
+        isDirty = true;
     }
 
     /// <summary>
@@ -226,7 +227,7 @@ public class InGameModel : MonoBehaviour
                 }
             }
         }
-        GameCycle();
+        PostProcessAfterMove();
     }
 
     /// <summary>
@@ -245,7 +246,7 @@ public class InGameModel : MonoBehaviour
                 }
             }
         }
-        GameCycle();
+        PostProcessAfterMove();
     }
 
     /// <summary>
@@ -264,7 +265,7 @@ public class InGameModel : MonoBehaviour
                 }
             }
         }
-        GameCycle();
+        PostProcessAfterMove();
     }
 
     /// <summary>
@@ -283,7 +284,7 @@ public class InGameModel : MonoBehaviour
                 }
             }
         }
-        GameCycle();
+        PostProcessAfterMove();
     }
 
     /// <summary> 
@@ -301,15 +302,17 @@ public class InGameModel : MonoBehaviour
     /// <summary>
     ///  ゲームの1ターン分サイクルの実行
     /// </summary>
-    public void GameCycle()
+    public void PostProcessAfterMove()
     {
+        if (!isDirty) { return; }
         CreateNewRandomCell();
         OnChangeStageState?.Invoke(stageState);
 
         if (IsGameOver(stageState))
         {
             ScoreController.Instance.SaveScore(GetScore());
-            OnLoadResultScene();
+            OnGameOver?.Invoke();
         }
+        isDirty = false;
     }
 }
