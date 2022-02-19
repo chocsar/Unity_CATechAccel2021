@@ -24,11 +24,6 @@ public class InGameModel : MonoBehaviour
         OnChangeStageState?.Invoke(stageState);
     }
 
-    private void Update()
-    {
-        GameCycle();
-    }
-
     /// <summary>
     /// ステージの境界線をチェックして処理の継続をするか判定する
     /// </summary>
@@ -110,8 +105,6 @@ public class InGameModel : MonoBehaviour
         {
             return;
         }
-
-        isDirty = true;
     }
 
     /// <summary>
@@ -233,6 +226,7 @@ public class InGameModel : MonoBehaviour
                 }
             }
         }
+        GameCycle();
     }
 
     /// <summary>
@@ -251,6 +245,7 @@ public class InGameModel : MonoBehaviour
                 }
             }
         }
+        GameCycle();
     }
 
     /// <summary>
@@ -269,6 +264,7 @@ public class InGameModel : MonoBehaviour
                 }
             }
         }
+        GameCycle();
     }
 
     /// <summary>
@@ -287,6 +283,7 @@ public class InGameModel : MonoBehaviour
                 }
             }
         }
+        GameCycle();
     }
 
     /// <summary> 
@@ -306,8 +303,6 @@ public class InGameModel : MonoBehaviour
     /// </summary>
     public void GameCycle()
     {
-        if (!isDirty) return;
-
         CreateNewRandomCell();
         OnChangeStageState?.Invoke(stageState);
 
@@ -316,6 +311,5 @@ public class InGameModel : MonoBehaviour
             ScoreController.Instance.SaveScore(GetScore());
             OnLoadResultScene();
         }
-        isDirty = false;
     }
 }
