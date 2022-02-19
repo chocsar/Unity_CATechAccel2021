@@ -3,18 +3,18 @@ using System;
 
 public class InGameModel : MonoBehaviour
 {
-
+    /// <summary> /// 変数の宣言 /// </summary>
     private int score;
-    public event Action<int> OnChangeScore;
-    public event Action<int[,]> OnChangeStageState;
-
     /// <summary> /// 生成するCellの値を入れた配列 /// </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
     private readonly int[,] stageState = new int[Const.SquareSize, Const.SquareSize];
-
     /// <summary> /// 盤面の再描画を行う必要があるかのフラグ /// </summary>
     private bool isDirty;
 
+    /// <summary> /// C# Action /// </summary>
+    public event Action<int> OnChangeScore;
+    public event Action<int[,]> OnChangeStageState;
+    public event Action OnLoadResultScene;
 
     private void Start()
     {
@@ -26,22 +26,7 @@ public class InGameModel : MonoBehaviour
 
     private void Update()
     {
-        if (!isDirty)
-        {
-            return;
-        }
-        else
-        {
-            CreateNewRandomCell();
-            OnChangeStageState?.Invoke(stageState);
-
-            if (IsGameOver(stageState))
-            {
-                ScoreController.Instance.SaveScore(GetScore());
-                LoadResultScene();
-            }
-            isDirty = false;
-        }
+        GameCycle();
     }
 
     /// <summary>
@@ -215,14 +200,6 @@ public class InGameModel : MonoBehaviour
     }
 
     /// <summary>
-    /// ResultSceneをロードする
-    /// </summary>
-    private void LoadResultScene()
-    {
-        SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
-    }
-
-    /// <summary>
     /// ステージの初期状態を生成
     /// </summary>
     private void InitializeStage()
@@ -324,4 +301,21 @@ public class InGameModel : MonoBehaviour
 
     public int GetScore(){ return score; }
 
+    /// <summary>
+    ///  ゲームの1ターン分サイクルの実行
+    /// </summary>
+    public void GameCycle()
+    {
+        if (!isDirty) return;
+
+        CreateNewRandomCell();
+        OnChangeStageState?.Invoke(stageState);
+
+        if (IsGameOver(stageState))
+        {
+            ScoreController.Instance.SaveScore(GetScore());
+            OnLoadResultScene();
+        }
+        isDirty = false;
+    }
 }

@@ -4,8 +4,11 @@ using System;
 
 public class InGameView : MonoBehaviour
 {
+    /// <summary> /// 変数の宣言 /// </summary>
     [SerializeField] private Text scoreText;
     [SerializeField] private Cell[] cells;
+
+    /// <summary> /// C# Action /// </summary>
     public event Action MoveCellsRight;
     public event Action MoveCellsLeft;
     public event Action MoveCellsUp;

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class InGamePresenter : MonoBehaviour
 {
+    /// <summary> /// ViewとModelを繋ぐために変数として宣言 /// </summary>
     private InGameModel inGameModel;
     private InGameView inGameView;
 
@@ -23,6 +24,16 @@ public class InGamePresenter : MonoBehaviour
         inGameView.MoveCellsLeft += inGameModel.MoveCellsLeft;
         inGameView.MoveCellsUp += inGameModel.MoveCellsUp;
         inGameView.MoveCellsDown += inGameModel.MoveCellsDown;
+
+        // Model → Presenter
+        inGameModel.OnLoadResultScene += LoadResultScene;
     }
 
+    /// <summary>
+    /// ResultSceneをロードする
+    /// </summary>
+    private void LoadResultScene()
+    {
+        SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
+    }
 }
