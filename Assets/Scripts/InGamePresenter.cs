@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class InGamePresenter : MonoBehaviour
 {
-    /// ViewとModelを繋ぐために変数として宣言
+    // ViewとModelを繋ぐために変数として宣言
     private InGameModel inGameModel;
     private InGameView inGameView;
 
