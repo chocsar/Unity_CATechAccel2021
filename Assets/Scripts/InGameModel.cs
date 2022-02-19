@@ -3,7 +3,7 @@ using System;
 
 public class InGameModel : MonoBehaviour
 {
-    /// <summary> 変数の宣言 </summary>
+    /// 変数の宣言
     private int score;
     /// <summary> 生成するCellの値を入れた配列 </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
@@ -11,7 +11,7 @@ public class InGameModel : MonoBehaviour
     /// <summary> 盤面の再描画を行う必要があるかのフラグ </summary>
     private bool isDirty;
 
-    /// <summary> C# Action </summary>
+    /// C# Action
     public event Action<int> OnChangeScore;
     public event Action<int[,]> OnChangeStageState;
     public event Action OnGameOver;

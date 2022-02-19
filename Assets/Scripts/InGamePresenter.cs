@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class InGamePresenter : MonoBehaviour
 {
-    /// <summary> ViewとModelを繋ぐために変数として宣言 </summary>
+    /// ViewとModelを繋ぐために変数として宣言
     private InGameModel inGameModel;
     private InGameView inGameView;
 
@@ -20,10 +20,10 @@ public class InGamePresenter : MonoBehaviour
 
         // View → Model
         // Viewの右矢印が押されているかを監視する
-        inGameView.MoveCellsRight += inGameModel.MoveCellsRight;
-        inGameView.MoveCellsLeft += inGameModel.MoveCellsLeft;
-        inGameView.MoveCellsUp += inGameModel.MoveCellsUp;
-        inGameView.MoveCellsDown += inGameModel.MoveCellsDown;
+        inGameView.OnInputRight += inGameModel.MoveCellsRight;
+        inGameView.OnInputLeft += inGameModel.MoveCellsLeft;
+        inGameView.OnInputUp += inGameModel.MoveCellsUp;
+        inGameView.OnInputDown += inGameModel.MoveCellsDown;
 
         // Model → Presenter
         inGameModel.OnGameOver += LoadResultScene;

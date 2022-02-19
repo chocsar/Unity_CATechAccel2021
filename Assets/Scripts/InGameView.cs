@@ -4,33 +4,33 @@ using System;
 
 public class InGameView : MonoBehaviour
 {
-    /// <summary> 変数の宣言 </summary>
+    /// 変数の宣言
     [SerializeField] private Text scoreText;
     [SerializeField] private Cell[] cells;
 
-    /// <summary> C# Action </summary>
-    public event Action MoveCellsRight;
-    public event Action MoveCellsLeft;
-    public event Action MoveCellsUp;
-    public event Action MoveCellsDown;
+    /// C# Action
+    public event Action OnInputRight;
+    public event Action OnInputLeft;
+    public event Action OnInputUp;
+    public event Action OnInputDown;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            MoveCellsRight?.Invoke();
+            OnInputRight?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            MoveCellsLeft?.Invoke();
+            OnInputLeft?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            MoveCellsUp?.Invoke();
+            OnInputUp?.Invoke();
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            MoveCellsDown?.Invoke();
+            OnInputDown?.Invoke();
         }
 
     }
