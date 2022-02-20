@@ -8,7 +8,6 @@ public class InGamePresenter : MonoBehaviour
 
     private void Start()
     {
-
         inGameModel = GetComponent<InGameModel>();
         inGameView = GetComponent<InGameView>();
 
