@@ -6,6 +6,7 @@ public class InGameView : MonoBehaviour
 {
     // 変数の宣言
     [SerializeField] private Text scoreText;
+    [SerializeField] private Text highScoreText;
     [SerializeField] private Cell[] cells;
 
     // C# Action
@@ -38,6 +39,11 @@ public class InGameView : MonoBehaviour
     public void SetScore(int score)
     {
         scoreText.text = $"Score: {score}";
+    }
+
+    public void SetHighScore(int score)
+    {
+        highScoreText.text = $"Score: {score}";
     }
 
     /// <summary>

@@ -13,6 +13,7 @@ public class InGameModel : MonoBehaviour
 
     // C# Action
     public event Action<int> OnChangeScore;
+    public event Action<int> OnChangeHighScore;
     public event Action<int[,]> OnChangeStageState;
     public event Action OnGameOver;
 
@@ -22,6 +23,7 @@ public class InGameModel : MonoBehaviour
         InitializeStage();
         // ステージの初期状態をViewに反映
         OnChangeStageState?.Invoke(stageState);
+        OnChangeHighScore?.Invoke(ScoreController.Instance.GetHighScore());
     }
 
     /// <summary>
@@ -311,6 +313,7 @@ public class InGameModel : MonoBehaviour
         if (IsGameOver(stageState))
         {
             ScoreController.Instance.SaveScore(GetScore());
+            ScoreController.Instance.CheckHighScore(GetScore());
             OnGameOver?.Invoke();
         }
         isDirty = false;
