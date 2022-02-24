@@ -41,15 +41,4 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     {
         return PlayerPrefs.GetInt(SaveKeyNames.HighScore.ToString(), 0);
     }
-
-    /// <summary>
-    ///  ハイスコアが更新されるかの確認してハイスコアの値を返す
-    /// </summary>
-    public void CheckHighScore(int score)
-    {
-        if(score > GetHighScore())
-        {
-            SaveHighScore(score);
-        }
-    }
 }
