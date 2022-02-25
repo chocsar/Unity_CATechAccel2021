@@ -14,23 +14,21 @@ public class InGameModel : MonoBehaviour
 
     // C# Action
     public event Action<int> OnChangeScore;
-    public event Action<int> OnChangeHighScore;
     public event Action<int[,]> OnChangeStageState;
     public event Action OnGameOver;
+    public event Action OnSetHighScore;
 
     // <summary>
     /// ゲームの初期状態を生成
     /// </summary>
-    public void InitializeGame()
+    public void Initialize()
     {
         // ステージの初期状態を生成
         InitializeStage();
         // ステージの初期状態をViewに反映
         OnChangeStageState?.Invoke(stageState);
-        // highScore変数へハイスコアをロードして代入
-        highScore = ScoreController.Instance.GetHighScore();
-        // ハイスコアの値をViewに反映
-        OnChangeHighScore?.Invoke(highScore);
+        // ハイスコアの値セットとViewへのイベントを発火
+        OnSetHighScore?.Invoke();
     }
 
     /// <summary>
