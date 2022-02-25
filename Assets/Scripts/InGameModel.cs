@@ -25,10 +25,10 @@ public class InGameModel : MonoBehaviour
     {
         // ステージの初期状態を生成
         InitializeStage();
-        // ステージの初期状態をViewに反映
-        OnChangeStageState?.Invoke(stageState);
         // ハイスコアの値セットとViewへのイベントを発火
         OnSetHighScore?.Invoke();
+        // ステージの初期状態をViewに反映
+        OnChangeStageState?.Invoke(stageState);
     }
 
     /// <summary>
