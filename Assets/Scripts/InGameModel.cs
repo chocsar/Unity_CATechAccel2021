@@ -16,7 +16,8 @@ public class InGameModel : MonoBehaviour
     public event Action<int> OnChangeScore;
     public event Action<int[,]> OnChangeStageState;
     public event Action OnGameOver;
-    public event Action OnSetHighScore;
+    public event Action<int> OnChangeHighScore;
+    public event Action OnCheckHighScore;
 
     // <summary>
     /// ゲームの初期状態を生成
@@ -25,8 +26,6 @@ public class InGameModel : MonoBehaviour
     {
         // ステージの初期状態を生成
         InitializeStage();
-        // ハイスコアの値セットとViewへのイベントを発火
-        OnSetHighScore?.Invoke();
         // ステージの初期状態をViewに反映
         OnChangeStageState?.Invoke(stageState);
     }
@@ -318,7 +317,8 @@ public class InGameModel : MonoBehaviour
         if (IsGameOver(stageState))
         {
             ScoreController.Instance.SaveScore(GetScore());
-            CheckHighScore(GetScore());
+            if (isChangeHighScore()) { SaveHighScore(); }
+            OnCheckHighScore?.Invoke();
             OnGameOver?.Invoke();
         }
         isDirty = false;
@@ -327,11 +327,27 @@ public class InGameModel : MonoBehaviour
     /// <summary>
     ///  ハイスコアが更新されるかの確認してハイスコアの値を返す
     /// </summary>
-    public void CheckHighScore(int score)
+    private bool isChangeHighScore()
     {
-        if (score > highScore)
-        {
-            ScoreController.Instance.SaveHighScore(score);
-        }
+        if (score > highScore) { return true; }
+        return false;
+    }
+
+    /// <summary>
+    /// ハイスコアの保存を実施
+    /// </summary>
+    private void SaveHighScore()
+    {
+        ScoreController.Instance.SaveHighScore(score);
+    }
+
+    /// <summary>
+    /// ハイスコアの値セットとViewへのイベントを発火
+    /// </summary>
+    public void SetHighScore(int score)
+    {
+        highScore = score;
+        // ハイスコアの値をViewに反映
+        OnChangeHighScore?.Invoke(score);
     }
 }

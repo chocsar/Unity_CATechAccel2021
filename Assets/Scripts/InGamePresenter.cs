@@ -21,6 +21,7 @@ public class InGamePresenter : MonoBehaviour
         inGameModel.OnChangeScore += inGameView.SetScore;
         // ステージのCell状の値の変更を監視する
         inGameModel.OnChangeStageState += inGameView.ApplyStageView;
+        inGameModel.OnChangeHighScore += inGameView.SetHighScore;
 
         // View → Model
         // Viewの右矢印が押されているかを監視する
@@ -31,13 +32,15 @@ public class InGamePresenter : MonoBehaviour
 
         // Model → Presenter
         inGameModel.OnGameOver += LoadResultScene;
-        inGameModel.OnSetHighScore += SetHighScore;
+
 
         // Presenter → Model
         OnChangeHighScore += inGameView.SetHighScore;
 
         //Initialize
         inGameModel.Initialize();
+        // ハイスコアの値セットとViewへのイベントを発火
+        inGameModel.SetHighScore(ScoreController.Instance.GetHighScore());
     }
 
     /// <summary>
@@ -46,16 +49,5 @@ public class InGamePresenter : MonoBehaviour
     private void LoadResultScene()
     {
         SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
-    }
-
-    /// <summary>
-    /// ハイスコアの値セットとViewへのイベントを発火
-    /// </summary>
-    private void SetHighScore()
-    {
-        // highScore変数へハイスコアをロードして代入
-        int highScore = ScoreController.Instance.GetHighScore();
-        // ハイスコアの値をViewに反映
-        OnChangeHighScore?.Invoke(highScore);
     }
 }
