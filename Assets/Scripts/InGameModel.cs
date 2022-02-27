@@ -15,9 +15,8 @@ public class InGameModel : MonoBehaviour
     // C# Action
     public event Action<int> OnChangeScore;
     public event Action<int[,]> OnChangeStageState;
-    public event Action OnGameOver;
+    public event Action<int> OnGameOver;
     public event Action<int> OnChangeHighScore;
-    public event Action OnCheckHighScore;
 
     // <summary>
     /// ゲームの初期状態を生成
@@ -314,31 +313,16 @@ public class InGameModel : MonoBehaviour
         CreateNewRandomCell();
         OnChangeStageState?.Invoke(stageState);
 
-        if (IsGameOver(stageState))
-        {
-            ScoreController.Instance.SaveScore(GetScore());
-            if (isChangeHighScore()) { SaveHighScore(); }
-            OnCheckHighScore?.Invoke();
-            OnGameOver?.Invoke();
-        }
+        if (IsGameOver(stageState)){ OnGameOver?.Invoke(score); }
         isDirty = false;
     }
 
     /// <summary>
     ///  ハイスコアが更新されるかの確認してハイスコアの値を返す
     /// </summary>
-    private bool isChangeHighScore()
+    public bool IsHighScore()
     {
-        if (score > highScore) { return true; }
-        return false;
-    }
-
-    /// <summary>
-    /// ハイスコアの保存を実施
-    /// </summary>
-    private void SaveHighScore()
-    {
-        ScoreController.Instance.SaveHighScore(score);
+        return score > highScore;
     }
 
     /// <summary>

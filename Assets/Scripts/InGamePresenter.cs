@@ -31,7 +31,7 @@ public class InGamePresenter : MonoBehaviour
         inGameView.OnInputDown += inGameModel.MoveCellsDown;
 
         // Model → Presenter
-        inGameModel.OnGameOver += LoadResultScene;
+        inGameModel.OnGameOver += OnGameOverProcess;
 
 
         // Presenter → Model
@@ -44,10 +44,31 @@ public class InGamePresenter : MonoBehaviour
     }
 
     /// <summary>
+    ///  ゲームオーバーになった後にスコアの保存と保存しているハイスコアの値変更、シーンのロードを行う
+    /// </summary>
+    private void OnGameOverProcess(int score)
+    {
+        // ハイスコアが更新されているか確認して、更新されていれば上書き
+        if (inGameModel.IsHighScore()) { SaveHighScore(score); }
+        // スコアの保存
+        ScoreController.Instance.SaveScore(inGameModel.GetScore());
+        // シーンのロード
+        LoadResultScene();
+    }
+
+    /// <summary>
     /// ResultSceneをロードする
     /// </summary>
     private void LoadResultScene()
     {
         SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
+    }
+
+    /// <summary>
+    /// ハイスコアの保存を実施
+    /// </summary>
+    private void SaveHighScore(int score)
+    {
+        ScoreController.Instance.SaveHighScore(score);
     }
 }
