@@ -15,7 +15,7 @@ public class InGameModel : MonoBehaviour
     // C# Action
     public event Action<int> OnChangeScore;
     public event Action<int[,]> OnChangeStageState;
-    public event Action<int> OnGameOver;
+    public event Action OnGameOver;
     public event Action<int> OnChangeHighScore;
 
     // <summary>
@@ -313,7 +313,7 @@ public class InGameModel : MonoBehaviour
         CreateNewRandomCell();
         OnChangeStageState?.Invoke(stageState);
 
-        if (IsGameOver(stageState)){ OnGameOver?.Invoke(score); }
+        if (IsGameOver(stageState)){ OnGameOver?.Invoke(); }
         isDirty = false;
     }
 

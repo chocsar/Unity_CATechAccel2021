@@ -46,10 +46,10 @@ public class InGamePresenter : MonoBehaviour
     /// <summary>
     ///  ゲームオーバーになった後にスコアの保存と保存しているハイスコアの値変更、シーンのロードを行う
     /// </summary>
-    private void OnGameOverProcess(int score)
+    private void OnGameOverProcess()
     {
         // ハイスコアが更新されているか確認して、更新されていれば上書き
-        if (inGameModel.IsHighScore()) { SaveHighScore(score); }
+        if (inGameModel.IsHighScore()) { SaveHighScore(inGameModel.GetScore()); }
         // スコアの保存
         ScoreController.Instance.SaveScore(inGameModel.GetScore());
         // シーンのロード
