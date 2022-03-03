@@ -8,6 +8,7 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     public enum SaveKeyNames
     {
         Score,
+        HighScore
     }
     /// <summary>
     /// スコアの保存をする
@@ -23,5 +24,21 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     public int LoadScore()
     {
         return PlayerPrefs.GetInt(SaveKeyNames.Score.ToString(), 0);
+    }
+
+    /// <summary>
+    /// スコアの更新があれば保存をする
+    /// </summary>
+    public void SaveHighScore(int score)
+    {
+        PlayerPrefs.SetInt(SaveKeyNames.HighScore.ToString(), score);
+    }
+
+    /// <summary>
+    /// 保存されたハイスコアを取り出して値を返す
+    /// </summary>
+    public int GetHighScore()
+    {
+        return PlayerPrefs.GetInt(SaveKeyNames.HighScore.ToString(), 0);
     }
 }

@@ -5,6 +5,7 @@ public class InGameModel : MonoBehaviour
 {
     // 変数の宣言
     private int score;
+    private int highScore;
     /// <summary> 生成するCellの値を入れた配列 </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
     private readonly int[,] stageState = new int[Const.SquareSize, Const.SquareSize];
@@ -15,8 +16,12 @@ public class InGameModel : MonoBehaviour
     public event Action<int> OnChangeScore;
     public event Action<int[,]> OnChangeStageState;
     public event Action OnGameOver;
+    public event Action<int> OnChangeHighScore;
 
-    private void Start()
+    // <summary>
+    /// ゲームの初期状態を生成
+    /// </summary>
+    public void Initialize()
     {
         // ステージの初期状態を生成
         InitializeStage();
@@ -308,11 +313,25 @@ public class InGameModel : MonoBehaviour
         CreateNewRandomCell();
         OnChangeStageState?.Invoke(stageState);
 
-        if (IsGameOver(stageState))
-        {
-            ScoreController.Instance.SaveScore(GetScore());
-            OnGameOver?.Invoke();
-        }
+        if (IsGameOver(stageState)){ OnGameOver?.Invoke(); }
         isDirty = false;
+    }
+
+    /// <summary>
+    ///  ハイスコアが更新されるかの確認してハイスコアの値を返す
+    /// </summary>
+    public bool IsHighScore()
+    {
+        return score > highScore;
+    }
+
+    /// <summary>
+    /// ハイスコアの値セットとViewへのイベントを発火
+    /// </summary>
+    public void SetHighScore(int score)
+    {
+        highScore = score;
+        // ハイスコアの値をViewに反映
+        OnChangeHighScore?.Invoke(score);
     }
 }

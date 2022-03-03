@@ -3989,6 +3989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1226145406}
+  highScoreText: {fileID: 367621331}
   cells:
   - {fileID: 686132434}
   - {fileID: 707411126}
