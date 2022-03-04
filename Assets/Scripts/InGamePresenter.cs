@@ -6,6 +6,7 @@ public class InGamePresenter : MonoBehaviour
     // ViewとModelを繋ぐために変数として宣言
     private InGameModel inGameModel;
     private InGameView inGameView;
+    [SerializeField] private MenuWindowView menuWindowView;
 
     // C# Action
     public event Action<int> OnChangeHighScore;
@@ -32,10 +33,16 @@ public class InGamePresenter : MonoBehaviour
 
         // Model → Presenter
         inGameModel.OnGameOver += OnGameOverProcess;
-
+        inGameModel.OnGameRestart += LoadGameScene;
 
         // Presenter → Model
         OnChangeHighScore += inGameView.SetHighScore;
+
+        // ManagerView → MenuView
+        inGameView.OnClickMenuButton += menuWindowView.OpenWindow;
+
+        // MenuView → Model
+        menuWindowView.OnClickRestartButton += inGameModel.GameRestart;
 
         //Initialize
         inGameModel.Initialize();
@@ -62,6 +69,11 @@ public class InGamePresenter : MonoBehaviour
     private void LoadResultScene()
     {
         SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
+    }
+
+    private void LoadGameScene()
+    {
+        SceneController.Instance.LoadScene(SceneController.SceneNames.InGameScene);
     }
 
     /// <summary>

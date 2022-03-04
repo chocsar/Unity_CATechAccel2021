@@ -2,10 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
-public class MenuWindow : MonoBehaviour
+public class MenuWindowView : MonoBehaviour
 {
     [SerializeField] Button closeButton;
+    [SerializeField] Button restartButton;
+
+    public event Action OnClickRestartButton;
+
+    private void Start()
+    {
+        closeButton.onClick.AddListener(() => CloseWindow());
+        restartButton.onClick.AddListener(() => OnClickRestartButton?.Invoke());
+    }
 
     /// <summary>
     /// Windowを表示する 
