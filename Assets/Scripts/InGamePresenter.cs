@@ -10,6 +10,7 @@ public class InGamePresenter : MonoBehaviour
 
     // C# Action
     public event Action<int> OnChangeHighScore;
+    public event Action OnGameRestart;
 
     private void Start()
     {
@@ -33,7 +34,7 @@ public class InGamePresenter : MonoBehaviour
 
         // Model → Presenter
         inGameModel.OnGameOver += OnGameOverProcess;
-        inGameModel.OnGameRestart += LoadGameScene;
+        OnGameRestart += LoadGameScene;
 
         // Presenter → Model
         OnChangeHighScore += inGameView.SetHighScore;
@@ -42,7 +43,7 @@ public class InGamePresenter : MonoBehaviour
         inGameView.OnClickMenuButton += menuWindowView.OpenWindow;
 
         // MenuView → Model
-        menuWindowView.OnClickRestartButton += inGameModel.GameRestart;
+        menuWindowView.OnClickRestartButton += GameRestart;
 
         //Initialize
         inGameModel.Initialize();
@@ -82,5 +83,10 @@ public class InGamePresenter : MonoBehaviour
     private void SaveHighScore(int score)
     {
         ScoreController.Instance.SaveHighScore(score);
+    }
+
+    public void GameRestart()
+    {
+        LoadGameScene();
     }
 }

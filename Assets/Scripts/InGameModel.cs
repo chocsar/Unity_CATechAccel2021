@@ -17,7 +17,6 @@ public class InGameModel : MonoBehaviour
     public event Action<int[,]> OnChangeStageState;
     public event Action OnGameOver;
     public event Action<int> OnChangeHighScore;
-    public event Action OnGameRestart;
 
     // <summary>
     /// ゲームの初期状態を生成
@@ -334,10 +333,5 @@ public class InGameModel : MonoBehaviour
         highScore = score;
         // ハイスコアの値をViewに反映
         OnChangeHighScore?.Invoke(score);
-    }
-
-    public void GameRestart()
-    {
-        OnGameRestart?.Invoke();
     }
 }
