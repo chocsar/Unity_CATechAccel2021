@@ -43,7 +43,7 @@ public class InGamePresenter : MonoBehaviour
         inGameView.OnClickMenuButton += menuWindowView.OpenWindow;
 
         // MenuView → Model
-        menuWindowView.OnClickRestartButton += GameRestart;
+        menuWindowView.OnClickRestartButton += RestartGame;
 
         //Initialize
         inGameModel.Initialize();
@@ -72,6 +72,9 @@ public class InGamePresenter : MonoBehaviour
         SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
     }
 
+    /// <summary>
+    /// InGameSceneをロードする
+    /// </summary>
     private void LoadGameScene()
     {
         SceneController.Instance.LoadScene(SceneController.SceneNames.InGameScene);
@@ -85,7 +88,10 @@ public class InGamePresenter : MonoBehaviour
         ScoreController.Instance.SaveHighScore(score);
     }
 
-    public void GameRestart()
+    /// <summary>
+    /// GameRestartされた際の処理
+    /// </summary>
+    public void RestartGame()
     {
         LoadGameScene();
     }
