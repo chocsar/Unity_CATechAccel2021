@@ -42,8 +42,8 @@ public class InGamePresenter : MonoBehaviour
         // ManagerView → MenuView
         inGameView.OnClickMenuButton += menuWindowView.OpenWindow;
 
-        // MenuView → Model
-        menuWindowView.OnClickRestartButton += RestartGame;
+        // MenuView → Presenter
+        menuWindowView.OnClickRestartButton += OnGameRestartProcess;
 
         //Initialize
         inGameModel.Initialize();
@@ -56,12 +56,21 @@ public class InGamePresenter : MonoBehaviour
     /// </summary>
     private void OnGameOverProcess()
     {
-        // ハイスコアが更新されているか確認して、更新されていれば上書き
-        if (inGameModel.IsHighScore()) { SaveHighScore(inGameModel.GetScore()); }
-        // スコアの保存
-        ScoreController.Instance.SaveScore(inGameModel.GetScore());
+        // ハイスコアかを判定してスコアとハイスコアの保存
+        OnSaveScores();
         // シーンのロード
         LoadResultScene();
+    }
+
+    /// <summary>
+    /// GameRestartされた際の処理
+    /// </summary>
+    private void OnGameRestartProcess()
+    {
+        // ハイスコアかを判定してスコアとハイスコアの保存
+        OnSaveScores();
+        // シーンのロード
+        LoadGameScene();
     }
 
     /// <summary>
@@ -71,6 +80,18 @@ public class InGamePresenter : MonoBehaviour
     {
         SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
     }
+
+    /// <summary>
+    /// ハイスコアかを判定してスコアとハイスコアの保存
+    /// </summary>
+    private void OnSaveScores()
+    {
+        // ハイスコアが更新されているか確認して、更新されていれば上書き
+        if (inGameModel.IsHighScore()) { SaveHighScore(inGameModel.GetScore()); }
+        // スコアの保存
+        ScoreController.Instance.SaveScore(inGameModel.GetScore());
+    }
+
 
     /// <summary>
     /// InGameSceneをロードする
@@ -86,13 +107,5 @@ public class InGamePresenter : MonoBehaviour
     private void SaveHighScore(int score)
     {
         ScoreController.Instance.SaveHighScore(score);
-    }
-
-    /// <summary>
-    /// GameRestartされた際の処理
-    /// </summary>
-    public void RestartGame()
-    {
-        LoadGameScene();
     }
 }
