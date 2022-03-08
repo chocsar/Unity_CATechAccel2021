@@ -6,8 +6,8 @@ using System;
 
 public class MenuWindowView : MonoBehaviour
 {
-    [SerializeField] Button closeButton;
-    [SerializeField] Button restartButton;
+    [SerializeField] private Button closeButton;
+    [SerializeField] private Button restartButton;
 
     public event Action OnClickRestartButton;
 

@@ -8,7 +8,7 @@ public class InGameView : MonoBehaviour
     [SerializeField] private Text scoreText;
     [SerializeField] private Text highScoreText;
     [SerializeField] private Cell[] cells;
-    [SerializeField] private Button MenuButton;
+    [SerializeField] private Button menuButton;
 
     // C# Action
     public event Action OnInputRight;
@@ -19,7 +19,7 @@ public class InGameView : MonoBehaviour
 
     private void Start()
     {
-         MenuButton.onClick.AddListener(() => OnClickMenuButton?.Invoke());
+         menuButton.onClick.AddListener(() => OnClickMenuButton?.Invoke());
     }
 
     private void Update()
