@@ -8,9 +8,6 @@ public class InGamePresenter : MonoBehaviour
     private InGameView inGameView;
     [SerializeField] private MenuWindowView menuWindowView;
 
-    // C# Action
-    public event Action<int> OnChangeHighScore;
-
     private void Start()
     {
         inGameModel = GetComponent<InGameModel>();
@@ -33,9 +30,6 @@ public class InGamePresenter : MonoBehaviour
 
         // Model → Presenter
         inGameModel.OnGameOver += OnGameOverProcess;
-
-        // Presenter → Model
-        OnChangeHighScore += inGameView.SetHighScore;
 
         // ManagerView → MenuView
         inGameView.OnClickMenuButton += menuWindowView.OpenWindow;
