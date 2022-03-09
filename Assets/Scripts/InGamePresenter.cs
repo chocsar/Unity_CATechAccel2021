@@ -10,7 +10,6 @@ public class InGamePresenter : MonoBehaviour
 
     // C# Action
     public event Action<int> OnChangeHighScore;
-    public event Action OnGameRestart;
 
     private void Start()
     {
@@ -34,7 +33,6 @@ public class InGamePresenter : MonoBehaviour
 
         // Model → Presenter
         inGameModel.OnGameOver += OnGameOverProcess;
-        OnGameRestart += LoadGameScene;
 
         // Presenter → Model
         OnChangeHighScore += inGameView.SetHighScore;
