@@ -6,9 +6,7 @@ public class InGamePresenter : MonoBehaviour
     // ViewとModelを繋ぐために変数として宣言
     private InGameModel inGameModel;
     private InGameView inGameView;
-
-    // C# Action
-    public event Action<int> OnChangeHighScore;
+    [SerializeField] private MenuWindowView menuWindowView;
 
     private void Start()
     {
@@ -33,9 +31,11 @@ public class InGamePresenter : MonoBehaviour
         // Model → Presenter
         inGameModel.OnGameOver += OnGameOverProcess;
 
+        // ManagerView → MenuView
+        inGameView.OnClickMenuButton += menuWindowView.OpenWindow;
 
-        // Presenter → Model
-        OnChangeHighScore += inGameView.SetHighScore;
+        // MenuView → Presenter
+        menuWindowView.OnClickRestartButton += OnGameRestartProcess;
 
         //Initialize
         inGameModel.Initialize();
@@ -48,12 +48,21 @@ public class InGamePresenter : MonoBehaviour
     /// </summary>
     private void OnGameOverProcess()
     {
-        // ハイスコアが更新されているか確認して、更新されていれば上書き
-        if (inGameModel.IsHighScore()) { SaveHighScore(inGameModel.GetScore()); }
-        // スコアの保存
-        ScoreController.Instance.SaveScore(inGameModel.GetScore());
+        // ハイスコアかを判定してスコアとハイスコアの保存
+        OnSaveScores();
         // シーンのロード
         LoadResultScene();
+    }
+
+    /// <summary>
+    /// GameRestartされた際の処理
+    /// </summary>
+    private void OnGameRestartProcess()
+    {
+        // ハイスコアかを判定してスコアとハイスコアの保存
+        OnSaveScores();
+        // シーンのロード
+        LoadGameScene();
     }
 
     /// <summary>
@@ -62,6 +71,26 @@ public class InGamePresenter : MonoBehaviour
     private void LoadResultScene()
     {
         SceneController.Instance.LoadScene(SceneController.SceneNames.ResultScene);
+    }
+
+    /// <summary>
+    /// ハイスコアかを判定してスコアとハイスコアの保存
+    /// </summary>
+    private void OnSaveScores()
+    {
+        // ハイスコアが更新されているか確認して、更新されていれば上書き
+        if (inGameModel.IsHighScore()) { SaveHighScore(inGameModel.GetScore()); }
+        // スコアの保存
+        ScoreController.Instance.SaveScore(inGameModel.GetScore());
+    }
+
+
+    /// <summary>
+    /// InGameSceneをロードする
+    /// </summary>
+    private void LoadGameScene()
+    {
+        SceneController.Instance.LoadScene(SceneController.SceneNames.InGameScene);
     }
 
     /// <summary>
