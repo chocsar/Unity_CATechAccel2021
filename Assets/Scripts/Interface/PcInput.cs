@@ -1,18 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PcInput : MonoBehaviour
+public class PcInput : MonoBehaviour , IInputable
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool GetRightInput()
     {
-        
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            return true;
+        }
+        return false;
     }
-
-    // Update is called once per frame
-    void Update()
+    public bool GetLeftInput()
     {
-        
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            return true;
+        }
+        return false;
+    }
+    public bool GetUpInput()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            return true;
+        }
+        return false;
+    }
+    public bool GetDownInput()
+    {
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            return true;
+        }
+        return false;
     }
 }

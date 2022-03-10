@@ -1,4 +1,7 @@
 public interface IInputable
 {
-    void MoveCellsRight();
+    bool GetRightInput();
+    bool GetLeftInput();
+    bool GetUpInput();
+    bool GetDownInput();
 }

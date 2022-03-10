@@ -17,37 +17,39 @@ public class InGameView : MonoBehaviour
     public event Action OnInputDown;
     public event Action OnClickMenuButton;
 
+    IInputable input;
+
     private void Start()
     {
          menuButton.onClick.AddListener(() => OnClickMenuButton?.Invoke());
+
+        // もしIOSまたはandroidなら
+#if UNITY_IOS || UNITY_ANDROID
+
+        // それ以外なら
+#else
+        input = new PcInput();
+#endif
     }
 
     private void Update()
     {
-        // もしIOSまたはandroidなら
-        #if UNITY_IOS || UNITY_ANDROID
-
-
-
-        // それ以外なら
-        #else
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (input.GetRightInput())
         {
             OnInputRight?.Invoke();
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (input.GetLeftInput())
         {
             OnInputLeft?.Invoke();
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (input.GetUpInput())
         {
             OnInputUp?.Invoke();
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (input.GetDownInput())
         {
             OnInputDown?.Invoke();
         }
-        #endif
     }
 
     public void SetScore(int score)
