@@ -24,6 +24,13 @@ public class InGameView : MonoBehaviour
 
     private void Update()
     {
+        // もしIOSまたはandroidなら
+        #if UNITY_IOS || UNITY_ANDROID
+
+
+
+        // それ以外なら
+        #else
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             OnInputRight?.Invoke();
@@ -40,7 +47,7 @@ public class InGameView : MonoBehaviour
         {
             OnInputDown?.Invoke();
         }
-
+        #endif
     }
 
     public void SetScore(int score)
