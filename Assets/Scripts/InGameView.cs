@@ -24,12 +24,12 @@ public class InGameView : MonoBehaviour
          menuButton.onClick.AddListener(() => OnClickMenuButton?.Invoke());
 
         // もしIOSまたはandroidなら
-#if UNITY_IOS || UNITY_ANDROID
-
+        #if UNITY_IOS || UNITY_ANDROID
+        //input = new SmartphoneInput();
         // それ以外なら
-#else
+        #else
         input = new PcInput();
-#endif
+        #endif
     }
 
     private void Update()
