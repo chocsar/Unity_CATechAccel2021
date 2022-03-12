@@ -21,17 +21,17 @@ public class SmartphoneInput : IInputable
     /// <summary>
     /// フリックを開始した際の座標を代入
     /// </summary>
-    public void SetStartTouchPosition(Vector3 position)
+    public void SetStartTouchPosition()
     {
-        startTouchPosition = position;
+        startTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
     }
 
     /// <summary>
     /// フリックを終了した際の移動方向を計算
     /// </summary>
-    public Const.Inputs GetDirection(Vector3 position)
+    public Const.Inputs GetDirection()
     {
-        endTouchPosition = position;
+        endTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
         FlickDirection();
         if (flickValue.x > 200.0f)
         {

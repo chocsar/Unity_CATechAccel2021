@@ -2,32 +2,28 @@ using UnityEngine;
 
 public class PcInput : IInputable
 {
-    public bool GetRightInput()
+    public Const.Inputs GetDirection()
     {
-        return Input.GetKeyDown(KeyCode.RightArrow);
-    }
-
-    public bool GetLeftInput()
-    {
-        return Input.GetKeyDown(KeyCode.LeftArrow);
-    }
-
-    public bool GetUpInput()
-    {
-        return Input.GetKeyDown(KeyCode.UpArrow);
-    }
-
-    public bool GetDownInput()
-    {
-        return Input.GetKeyDown(KeyCode.DownArrow);
-    }
-
-    public Const.Inputs GetDirection(Vector3 position)
-    {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            return Const.Inputs.Right;
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            return Const.Inputs.Left;
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            return Const.Inputs.Up;
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            return Const.Inputs.Down;
+        }
         return Const.Inputs.None;
     }
 
-    public void SetStartTouchPosition(Vector3 position)
+    public void SetStartTouchPosition()
     {
 
     }

@@ -34,13 +34,14 @@ public class InGameView : MonoBehaviour
 
     private void Update()
     {
-#if UNITY_IOS || UNITY_ANDROID
         if (Input.GetMouseButtonDown(0))
         {
-            input.SetStartTouchPosition(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z));
+            input.SetStartTouchPosition();
         }
+#if UNITY_IOS || UNITY_ANDROID
         if (!Input.GetMouseButtonUp(0)) return;
-        switch (input.GetDirection(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z)))
+#endif
+        switch (input.GetDirection())
         {
             case Const.Inputs.Right:
                 OnInputRight?.Invoke();
@@ -57,24 +58,6 @@ public class InGameView : MonoBehaviour
             default:
                 break;
         }
-#elif UNITY_EDITOR
-        if (input.GetRightInput())
-        {
-            OnInputRight?.Invoke();
-        }
-        else if (input.GetLeftInput())
-        {
-            OnInputLeft?.Invoke();
-        }
-        else if (input.GetUpInput())
-        {
-            OnInputUp?.Invoke();
-        }
-        else if (input.GetDownInput())
-        {
-            OnInputDown?.Invoke();
-        }
-#endif
 
     }
 
