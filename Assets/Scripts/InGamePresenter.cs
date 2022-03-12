@@ -23,7 +23,7 @@ public class InGamePresenter : MonoBehaviour
 
         // View → Model
         // Viewの右矢印が押されているかを監視する
-        inGameView.OnInputRight += MoveCellsRight;
+        inGameView.OnInputRight += inGameModel.MoveCellsRight;
         inGameView.OnInputLeft += inGameModel.MoveCellsLeft;
         inGameView.OnInputUp += inGameModel.MoveCellsUp;
         inGameView.OnInputDown += inGameModel.MoveCellsDown;
@@ -100,14 +100,5 @@ public class InGamePresenter : MonoBehaviour
     private void SaveHighScore(int score)
     {
         ScoreController.Instance.SaveHighScore(score);
-    }
-
-    private void MoveCellsRight()
-    {
-        var inputTarget = inGameModel.GetComponent<IPcInputable>();
-        if (inputTarget != null)
-        {
-            inputTarget.MoveCellsRight();
-        }
     }
 }

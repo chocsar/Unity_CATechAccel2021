@@ -24,16 +24,40 @@ public class InGameView : MonoBehaviour
          menuButton.onClick.AddListener(() => OnClickMenuButton?.Invoke());
 
         // もしIOSまたはandroidなら
-        #if UNITY_IOS || UNITY_ANDROID
-        //input = new SmartphoneInput();
-        // それ以外なら
-        #else
+#if UNITY_IOS || UNITY_ANDROID
+        input = new SmartphoneInput();
+        // UNITY_EDITORなら
+#elif UNITY_EDITOR
         input = new PcInput();
-        #endif
+#endif
     }
 
     private void Update()
     {
+#if UNITY_IOS || UNITY_ANDROID
+        if (Input.GetMouseButtonDown(0))
+        {
+            input.SetStartTouchPosition(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z));
+        }
+        if (!Input.GetMouseButtonUp(0)) return;
+        switch (input.GetDirection(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z)))
+        {
+            case Const.Inputs.Right:
+                OnInputRight?.Invoke();
+                break;
+            case Const.Inputs.Left:
+                OnInputLeft?.Invoke();
+                break;
+            case Const.Inputs.Up:
+                OnInputUp?.Invoke();
+                break;
+            case Const.Inputs.Down:
+                OnInputDown?.Invoke();
+                break;
+            default:
+                break;
+        }
+#elif UNITY_EDITOR
         if (input.GetRightInput())
         {
             OnInputRight?.Invoke();
@@ -50,6 +74,8 @@ public class InGameView : MonoBehaviour
         {
             OnInputDown?.Invoke();
         }
+#endif
+
     }
 
     public void SetScore(int score)

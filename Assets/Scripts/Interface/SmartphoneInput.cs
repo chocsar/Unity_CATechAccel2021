@@ -1,56 +1,74 @@
 using UnityEngine;
 
-public class SmartphoneInput : MonoBehaviour
+public class SmartphoneInput : IInputable
 {
-    private Vector3 startTouchPos;
-    private Vector3 endTouchPos;
+    /// <summary> フリックを開始した際の座標を代入する変数 </summary>
+    private Vector3 startTouchPosition;
+    /// <summary> フリックを終了した際の座標を代入する変数  </summary>
+    private Vector3 endTouchPosition;
+    /// <summary> フリックの変化量を代入する変数 </summary>
+    private Vector2 flickValue;
 
-    private float flickValue_x;
-    private float flickValue_y;
-
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            startTouchPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            endTouchPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
-            FlickDirection();
-            GetDirection();
-        }
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
     private void FlickDirection()
     {
-        flickValue_x = endTouchPos.x - startTouchPos.x;
-        flickValue_y = endTouchPos.y - startTouchPos.y;
-        Debug.Log("x スワイプ量は" + flickValue_x);
-        Debug.Log("y スワイプ量は" + flickValue_y);
+        flickValue.x = endTouchPosition.x - startTouchPosition.x;
+        flickValue.y = endTouchPosition.y - startTouchPosition.y;
     }
 
-    private void GetDirection()
+    /// <summary>
+    /// フリックを開始した際の座標を代入
+    /// </summary>
+    public void SetStartTouchPosition(Vector3 position)
     {
-        if (flickValue_x > 200.0f)
-        {
-            Debug.Log("right");
-        }
-
-        if (flickValue_x < -200.0f)
-        {
-            Debug.Log("left ");
-        }
-
-        if (flickValue_y > 200.0f)
-        {
-            Debug.Log("up");
-        }
-        if (flickValue_y < -200.0f)
-        {
-            Debug.Log("down");
-        }
+        startTouchPosition = position;
     }
 
+    /// <summary>
+    /// フリックを終了した際の移動方向を計算
+    /// </summary>
+    public Const.Inputs GetDirection(Vector3 position)
+    {
+        endTouchPosition = position;
+        FlickDirection();
+        if (flickValue.x > 200.0f)
+        {
+            return Const.Inputs.Right;
+        }
+
+        if (flickValue.x < -200.0f)
+        {
+            return Const.Inputs.Left;
+        }
+
+        if (flickValue.y > 200.0f)
+        {
+            return Const.Inputs.Up;
+        }
+        if (flickValue.y < -200.0f)
+        {
+            return Const.Inputs.Down;
+        }
+        return Const.Inputs.None;
+    }
+
+    public bool GetRightInput()
+    {
+        return false;
+    }
+    public bool GetLeftInput()
+    {
+        return false;
+    }
+    public bool GetUpInput()
+    {
+        return false;
+    }
+    public bool GetDownInput()
+    {
+        return false;
+    }
 }
 

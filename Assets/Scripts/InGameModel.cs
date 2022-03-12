@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-public class InGameModel : MonoBehaviour , IPcInputable
+public class InGameModel : MonoBehaviour
 {
     // 変数の宣言
     private int score;
