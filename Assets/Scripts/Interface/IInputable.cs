@@ -1,5 +1,5 @@
 public interface IInputable
 {
-    Const.Inputs GetDirection();
+    Const.InputDirection GetDirection();
     void SetStartTouchPosition();
 }

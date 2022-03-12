@@ -17,16 +17,15 @@ public class InGameView : MonoBehaviour
     public event Action OnInputDown;
     public event Action OnClickMenuButton;
 
-    IInputable input;
+    private IInputable input;
 
     private void Start()
     {
          menuButton.onClick.AddListener(() => OnClickMenuButton?.Invoke());
 
-        // もしIOSまたはandroidなら
+        //プラットフォームに応じて入力クラスを切り替える
 #if UNITY_IOS || UNITY_ANDROID
         input = new SmartphoneInput();
-        // UNITY_EDITORなら
 #elif UNITY_EDITOR
         input = new PcInput();
 #endif
@@ -43,16 +42,16 @@ public class InGameView : MonoBehaviour
 #endif
         switch (input.GetDirection())
         {
-            case Const.Inputs.Right:
+            case Const.InputDirection.Right:
                 OnInputRight?.Invoke();
                 break;
-            case Const.Inputs.Left:
+            case Const.InputDirection.Left:
                 OnInputLeft?.Invoke();
                 break;
-            case Const.Inputs.Up:
+            case Const.InputDirection.Up:
                 OnInputUp?.Invoke();
                 break;
-            case Const.Inputs.Down:
+            case Const.InputDirection.Down:
                 OnInputDown?.Invoke();
                 break;
             default:

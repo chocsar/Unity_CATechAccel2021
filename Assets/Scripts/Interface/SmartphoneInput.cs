@@ -10,7 +10,7 @@ public class SmartphoneInput : IInputable
     private Vector2 flickValue;
 
     /// <summary>
-    /// 
+    /// フリック方向のベクトルを計算する
     /// </summary>
     private void FlickDirection()
     {
@@ -29,46 +29,30 @@ public class SmartphoneInput : IInputable
     /// <summary>
     /// フリックを終了した際の移動方向を計算
     /// </summary>
-    public Const.Inputs GetDirection()
+    public Const.InputDirection GetDirection()
     {
+        Debug.Log("call");
         endTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
         FlickDirection();
         if (flickValue.x > 200.0f)
         {
-            return Const.Inputs.Right;
+            return Const.InputDirection.Right;
         }
 
         if (flickValue.x < -200.0f)
         {
-            return Const.Inputs.Left;
+            return Const.InputDirection.Left;
         }
 
         if (flickValue.y > 200.0f)
         {
-            return Const.Inputs.Up;
+            return Const.InputDirection.Up;
         }
         if (flickValue.y < -200.0f)
         {
-            return Const.Inputs.Down;
+            return Const.InputDirection.Down;
         }
-        return Const.Inputs.None;
-    }
-
-    public bool GetRightInput()
-    {
-        return false;
-    }
-    public bool GetLeftInput()
-    {
-        return false;
-    }
-    public bool GetUpInput()
-    {
-        return false;
-    }
-    public bool GetDownInput()
-    {
-        return false;
+        return Const.InputDirection.None;
     }
 }
 

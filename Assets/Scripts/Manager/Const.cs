@@ -5,12 +5,12 @@ public class Const
     /// <summary> セルに2か4のどちらが生成されるかを決める確率を定義する </summary>
     public const float ProbabilityOfSelectGeneratingCell = 0.5f;
     /// <summary> インプットの方向を定義 </summary>
-    public enum Inputs
+    public enum InputDirection
     {
+        None,
         Right,
         Left,
         Up,
-        Down,
-        None,
+        Down, 
     }
 }
