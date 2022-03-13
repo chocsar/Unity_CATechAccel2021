@@ -27,30 +27,28 @@ public class InGameView : MonoBehaviour
 #if UNITY_IOS || UNITY_ANDROID
         input = new SmartphoneInput();
 #elif UNITY_EDITOR
-        input = new PcInput();
+        //input = new PcInput();
+        input = new SmartphoneInput();
 #endif
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            input.SetStartTouchPosition();
-        }
-#if UNITY_IOS || UNITY_ANDROID
-        if (!Input.GetMouseButtonUp(0)) return;
-#endif
         switch (input.GetDirection())
         {
+            // セルの右移動処理が実行された場合
             case Const.InputDirection.Right:
                 OnInputRight?.Invoke();
                 break;
+            // セルの左移動処理が実行された場合 
             case Const.InputDirection.Left:
                 OnInputLeft?.Invoke();
                 break;
+            // セルの上移動処理が実行された場合 
             case Const.InputDirection.Up:
                 OnInputUp?.Invoke();
                 break;
+            // セルの下移動処理が実行された場合 
             case Const.InputDirection.Down:
                 OnInputDown?.Invoke();
                 break;

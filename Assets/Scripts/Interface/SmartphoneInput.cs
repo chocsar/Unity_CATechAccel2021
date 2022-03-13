@@ -19,31 +19,30 @@ public class SmartphoneInput : IInputable
     }
 
     /// <summary>
-    /// フリックを開始した際の座標を代入
-    /// </summary>
-    public void SetStartTouchPosition()
-    {
-        startTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
-    }
-
-    /// <summary>
     /// フリックを終了した際の移動方向を計算
     /// </summary>
     public Const.InputDirection GetDirection()
     {
-        Debug.Log("call");
+        if (Input.GetMouseButtonDown(0))
+        {
+            // フリックを開始した際の座標を代入
+            startTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
+        }
+        // フリックを終了していなければNoneとして値を返して処理を終了
+        if (!Input.GetMouseButtonUp(0)) return Const.InputDirection.None;
+        // フリックを開始した際の座標を代入
         endTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
+        // フリック方向のベクトルを計算する
         FlickDirection();
+        // 以下どちら向きへフリックされたかの判定部分
         if (flickValue.x > 200.0f)
         {
             return Const.InputDirection.Right;
         }
-
         if (flickValue.x < -200.0f)
         {
             return Const.InputDirection.Left;
         }
-
         if (flickValue.y > 200.0f)
         {
             return Const.InputDirection.Up;
@@ -52,6 +51,7 @@ public class SmartphoneInput : IInputable
         {
             return Const.InputDirection.Down;
         }
+        // フリックされたかの判定をした結果規定量を満たさなかった際に処理をNoneとして終える
         return Const.InputDirection.None;
     }
 }

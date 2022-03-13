@@ -22,9 +22,4 @@ public class PcInput : IInputable
         }
         return Const.InputDirection.None;
     }
-
-    public void SetStartTouchPosition()
-    {
-
-    }
 }
