@@ -34,7 +34,14 @@ public class SmartphoneInput : IInputable
         endTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
         // フリック方向のベクトルを計算する
         FlickDirection();
-        // 以下どちら向きへフリックされたかの判定部分
+        return CheckDirection();
+    }
+
+    /// <summary>
+    /// どちら向きへフリックされたかの判定部分
+    /// </summary>
+    private Const.InputDirection CheckDirection()
+    {
         if (flickValue.x > 200.0f)
         {
             return Const.InputDirection.Right;
