@@ -27,8 +27,7 @@ public class InGameView : MonoBehaviour
 #if UNITY_IOS || UNITY_ANDROID
         input = new SmartphoneInput();
 #elif UNITY_EDITOR
-        //input = new PcInput();
-        input = new SmartphoneInput();
+        input = new PcInput();
 #endif
     }
 
