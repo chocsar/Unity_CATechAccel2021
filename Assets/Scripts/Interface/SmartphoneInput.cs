@@ -42,19 +42,19 @@ public class SmartphoneInput : IInputable
     /// </summary>
     private Const.InputDirection CheckDirection()
     {
-        if (flickValue.x > 200.0f)
+        if (flickValue.x > Const.FlickDirectionValue)
         {
             return Const.InputDirection.Right;
         }
-        if (flickValue.x < -200.0f)
+        if (flickValue.x < -Const.FlickDirectionValue)
         {
             return Const.InputDirection.Left;
         }
-        if (flickValue.y > 200.0f)
+        if (flickValue.y > Const.FlickDirectionValue)
         {
             return Const.InputDirection.Up;
         }
-        if (flickValue.y < -200.0f)
+        if (flickValue.y < -Const.FlickDirectionValue)
         {
             return Const.InputDirection.Down;
         }
