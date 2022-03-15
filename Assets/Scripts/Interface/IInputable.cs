@@ -1,4 +1,4 @@
 public interface IInputable
 {
-    Const.InputDirection GetDirection();
+    Const.InputDirection GetTouch();
 }

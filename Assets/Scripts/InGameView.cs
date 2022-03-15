@@ -33,7 +33,7 @@ public class InGameView : MonoBehaviour
 
     private void Update()
     {
-        switch (input.GetDirection())
+        switch (input.GetTouch())
         {
             // セルの右移動処理が実行された場合
             case Const.InputDirection.Right:
