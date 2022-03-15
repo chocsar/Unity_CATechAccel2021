@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SmartphoneInput : IInputable
@@ -48,27 +49,37 @@ public class SmartphoneInput : IInputable
     /// </summary>
     private Const.InputDirection CheckDirection()
     {
-        if (flickValue.x > Const.FlickDirectionValue)
+        // フリックの値が規定量に満たさない場合に処理を終了させる
+        if (Math.Abs(flickValue.x) < Const.FlickDirectionValue && Math.Abs(flickValue.y) < Const.FlickDirectionValue)
         {
-            isFlick = false;
-            return Const.InputDirection.Right;
+            return Const.InputDirection.None;
         }
-        if (flickValue.x < -Const.FlickDirectionValue)
+        // フリックを終了した判定にする
+        isFlick = false;
+        // もしflickValue.yよりflickValue.xが大きければy軸方向の処理を優先させる
+        if (Math.Abs(flickValue.x) > Math.Abs(flickValue.y))
         {
-            isFlick = false;
-            return Const.InputDirection.Left;
+            if (flickValue.x > Const.FlickDirectionValue)
+            {
+                return Const.InputDirection.Right;
+            }
+            if (flickValue.x < -Const.FlickDirectionValue)
+            {
+                return Const.InputDirection.Left;
+            }
         }
-        if (flickValue.y > Const.FlickDirectionValue)
+        else
         {
-            isFlick = false;
-            return Const.InputDirection.Up;
+            if (flickValue.y > Const.FlickDirectionValue)
+            {
+                return Const.InputDirection.Up;
+            }
+            if (flickValue.y < -Const.FlickDirectionValue)
+            {
+                return Const.InputDirection.Down;
+            }
         }
-        if (flickValue.y < -Const.FlickDirectionValue)
-        {
-            isFlick = false;
-            return Const.InputDirection.Down;
-        }
-        // フリックされたかの判定をした結果規定量を満たさなかった際に処理をNoneとして終える
+        // もしフリックされたかの判定をした結果規定量を満たさなかった際に処理をNoneとして終える
         return Const.InputDirection.None;
     }
 }
