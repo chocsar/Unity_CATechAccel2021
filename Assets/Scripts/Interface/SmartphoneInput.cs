@@ -24,24 +24,31 @@ public class SmartphoneInput : IInputable
     /// <summary>
     /// フリックを終了した際の移動方向を計算
     /// </summary>
-    public Const.InputDirection GetTouch()
+    public Const.InputDirection GetDirection()
     {
-        if (Input.GetMouseButtonDown(0))
+        Touch touch = Input.GetTouch(0);
+        // タップし始めたときの処理
+        if (touch.phase == TouchPhase.Began)
         {
             // フリックを開始した際の座標を代入
             startTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
             isFlick = true;
         }
-        // フリック中でなければ処理を終了する
-        if (!isFlick)
+        else if (touch.phase == TouchPhase.Moved)
         {
+            // タッチ移動
+            // フリックを開始した際の座標を代入
+            endTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
+            // フリック方向のベクトルを計算する
+            CheckFlickValue();
+            return CheckDirection();
+        }
+        else if (touch.phase == TouchPhase.Ended)
+        {
+            // フリック中でなければ処理を終了する
             return Const.InputDirection.None;
         }
-        // フリックを開始した際の座標を代入
-        endTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
-        // フリック方向のベクトルを計算する
-        CheckFlickValue();
-        return CheckDirection();
+        return Const.InputDirection.None;
     }
 
     /// <summary>
@@ -81,6 +88,11 @@ public class SmartphoneInput : IInputable
         }
         // もしフリックされたかの判定をした結果規定量を満たさなかった際に処理をNoneとして終える
         return Const.InputDirection.None;
+    }
+
+    public void GetTouch()
+    {
+
     }
 }
 

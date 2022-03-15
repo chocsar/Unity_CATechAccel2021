@@ -27,14 +27,13 @@ public class InGameView : MonoBehaviour
 #if UNITY_IOS || UNITY_ANDROID
         input = new SmartphoneInput();
 #elif UNITY_EDITOR
-        //input = new PcInput();
-        input = new SmartphoneInput();
+        input = new PcInput();
 #endif
     }
 
     private void Update()
     {
-        switch (input.GetTouch())
+        switch (input.GetDirection())
         {
             // セルの右移動処理が実行された場合
             case Const.InputDirection.Right:

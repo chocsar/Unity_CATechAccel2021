@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PcInput : IInputable
 {
-    public Const.InputDirection GetTouch()
+    public Const.InputDirection GetDirection()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
