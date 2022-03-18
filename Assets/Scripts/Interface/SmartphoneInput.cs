@@ -26,6 +26,11 @@ public class SmartphoneInput : IInputable
     /// </summary>
     public Const.InputDirection GetDirection()
     {
+        // 画面をタップしていない場合は処理を終了させる
+        if (Input.touchCount == 0)
+        {
+            return Const.InputDirection.None;
+        }
         Touch touch = Input.GetTouch(0);
         // タップし始めたときの処理
         if (touch.phase == TouchPhase.Began)
@@ -34,19 +39,22 @@ public class SmartphoneInput : IInputable
             startTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
             isFlick = true;
         }
-        else if (touch.phase == TouchPhase.Moved)
+        else if (touch.phase == TouchPhase.Moved && isFlick)
         {
             // タッチ移動
             // フリックを開始した際の座標を代入
-            endTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
+            SetEndFlickValue();
             // フリック方向のベクトルを計算する
             CheckFlickValue();
             return CheckDirection();
         }
-        else if (touch.phase == TouchPhase.Ended)
+        else if (touch.phase == TouchPhase.Ended && isFlick)
         {
-            // フリック中でなければ処理を終了する
-            return Const.InputDirection.None;
+            // フリックを開始した際の座標を代入
+            SetEndFlickValue();
+            // フリック方向のベクトルを計算する
+            CheckFlickValue();
+            return CheckDirection();
         }
         return Const.InputDirection.None;
     }
@@ -90,9 +98,12 @@ public class SmartphoneInput : IInputable
         return Const.InputDirection.None;
     }
 
-    public void GetTouch()
+    /// <summary>
+    /// タッチを終了した座標を代入する
+    /// </summary>
+    private void SetEndFlickValue()
     {
-
+        endTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
     }
 }
 
