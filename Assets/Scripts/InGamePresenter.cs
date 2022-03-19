@@ -31,6 +31,7 @@ public class InGamePresenter : MonoBehaviour
         // Model → Presenter
         inGameModel.OnGameOver += OnGameOverProcess;
 
+
         // ManagerView → MenuView
         inGameView.OnClickMenuButton += menuWindowView.OpenWindow;
 

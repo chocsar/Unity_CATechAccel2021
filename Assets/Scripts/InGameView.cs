@@ -17,28 +17,42 @@ public class InGameView : MonoBehaviour
     public event Action OnInputDown;
     public event Action OnClickMenuButton;
 
+    private IInputable input;
+
     private void Start()
     {
          menuButton.onClick.AddListener(() => OnClickMenuButton?.Invoke());
+        input = new SmartphoneInput();
+        //プラットフォームに応じて入力クラスを切り替える
+#if UNITY_IOS || UNITY_ANDROID
+        input = new SmartphoneInput();
+#elif UNITY_EDITOR
+        //input = new PcInput();
+#endif
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        switch (input.GetDirection())
         {
-            OnInputRight?.Invoke();
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            OnInputLeft?.Invoke();
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            OnInputUp?.Invoke();
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            OnInputDown?.Invoke();
+            // セルの右移動処理が実行された場合
+            case Const.InputDirection.Right:
+                OnInputRight?.Invoke();
+                break;
+            // セルの左移動処理が実行された場合 
+            case Const.InputDirection.Left:
+                OnInputLeft?.Invoke();
+                break;
+            // セルの上移動処理が実行された場合 
+            case Const.InputDirection.Up:
+                OnInputUp?.Invoke();
+                break;
+            // セルの下移動処理が実行された場合 
+            case Const.InputDirection.Down:
+                OnInputDown?.Invoke();
+                break;
+            default:
+                break;
         }
 
     }
