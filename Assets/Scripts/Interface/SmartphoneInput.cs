@@ -43,7 +43,7 @@ public class SmartphoneInput : IInputable
         {
             // タッチ移動
             // フリックを開始した際の座標を代入
-            SetEndFlickValue();
+            SetEndPosition();
             // フリック方向のベクトルを計算する
             CheckFlickValue();
             return CheckDirection();
@@ -51,7 +51,7 @@ public class SmartphoneInput : IInputable
         else if (touch.phase == TouchPhase.Ended && isFlick)
         {
             // フリックを開始した際の座標を代入
-            SetEndFlickValue();
+            SetEndPosition();
             // フリック方向のベクトルを計算する
             CheckFlickValue();
             return CheckDirection();
@@ -65,7 +65,7 @@ public class SmartphoneInput : IInputable
     private Const.InputDirection CheckDirection()
     {
         // フリックの値が規定量に満たさない場合に処理を終了させる
-        if (Math.Abs(flickValue.x) < Const.FlickDirectionValue && Math.Abs(flickValue.y) < Const.FlickDirectionValue)
+        if (Math.Abs(flickValue.x) <= Const.FlickDirectionValue && Math.Abs(flickValue.y) <= Const.FlickDirectionValue)
         {
             return Const.InputDirection.None;
         }
@@ -101,7 +101,7 @@ public class SmartphoneInput : IInputable
     /// <summary>
     /// タッチを終了した座標を代入する
     /// </summary>
-    private void SetEndFlickValue()
+    private void SetEndPosition()
     {
         endTouchPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
     }
