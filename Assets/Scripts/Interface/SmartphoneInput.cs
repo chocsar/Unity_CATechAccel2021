@@ -42,7 +42,7 @@ public class SmartphoneInput : IInputable
         else if (touch.phase == TouchPhase.Moved && isFlick)
         {
             // タッチ移動
-            // フリックを開始した際の座標を代入
+            // フリックを終了した際の座標を代入
             SetEndPosition();
             // フリック方向のベクトルを計算する
             CheckFlickValue();
@@ -50,7 +50,7 @@ public class SmartphoneInput : IInputable
         }
         else if (touch.phase == TouchPhase.Ended && isFlick)
         {
-            // フリックを開始した際の座標を代入
+            // フリックを終了した際の座標を代入
             SetEndPosition();
             // フリック方向のベクトルを計算する
             CheckFlickValue();
