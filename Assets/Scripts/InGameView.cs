@@ -22,12 +22,11 @@ public class InGameView : MonoBehaviour
     private void Start()
     {
          menuButton.onClick.AddListener(() => OnClickMenuButton?.Invoke());
-        input = new SmartphoneInput();
         //プラットフォームに応じて入力クラスを切り替える
 #if UNITY_IOS || UNITY_ANDROID
         input = new SmartphoneInput();
 #elif UNITY_EDITOR
-        //input = new PcInput();
+        input = new PcInput();
 #endif
     }
 
