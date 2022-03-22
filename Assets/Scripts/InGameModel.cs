@@ -11,15 +11,13 @@ public class InGameModel : MonoBehaviour
     public IObservable<int> ReactiveHighScore => reactiveHighScore;
 
     public Subject<Unit> OnGameOver = new Subject<Unit>();
+    public Subject<int[,]> OnChangeStageState = new Subject<int[,]>();
 
     /// <summary> 生成するCellの値を入れた配列 </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
     private readonly int[,] stageState = new int[Const.SquareSize, Const.SquareSize];
     /// <summary> 盤面の再描画を行う必要があるかのフラグ </summary>
     private bool isDirty;
-
-    // C# Action
-    public event Action<int[,]> OnChangeStageState;
 
     // <summary>
     /// ゲームの初期状態を生成
@@ -29,7 +27,7 @@ public class InGameModel : MonoBehaviour
         // ステージの初期状態を生成
         InitializeStage();
         // ステージの初期状態をViewに反映
-        OnChangeStageState?.Invoke(stageState);
+        OnChangeStageState?.OnNext(stageState);
     }
 
     /// <summary>
@@ -314,7 +312,7 @@ public class InGameModel : MonoBehaviour
     {
         if (!isDirty) { return; }
         CreateNewRandomCell();
-        OnChangeStageState?.Invoke(stageState);
+        OnChangeStageState?.OnNext(stageState);
 
         if (IsGameOver(stageState)){ OnGameOver?.OnNext(Unit.Default); }
         isDirty = false;
