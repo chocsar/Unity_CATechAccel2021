@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System;
+using UniRx;
 
 public class InGameModel : MonoBehaviour
 {
     // 変数の宣言
-    private int score;
+    private ReactiveProperty<int> reactiveScore = new ReactiveProperty<int>();
+    public IObservable<int> ReactiveScore => reactiveScore;
+    
     private int highScore;
     /// <summary> 生成するCellの値を入れた配列 </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
@@ -13,7 +16,6 @@ public class InGameModel : MonoBehaviour
     private bool isDirty;
 
     // C# Action
-    public event Action<int> OnChangeScore;
     public event Action<int[,]> OnChangeStageState;
     public event Action OnGameOver;
     public event Action<int> OnChangeHighScore;
@@ -298,11 +300,11 @@ public class InGameModel : MonoBehaviour
     /// </summary>
     public void SetScore(int cellValue)
     {
-        score += cellValue * 2;
-        OnChangeScore?.Invoke(score);
+        reactiveScore.Value += cellValue * 2;
+        //OnChangeScore?.Invoke(score);
     }
 
-    public int GetScore(){ return score; }
+    public int GetScore(){ return reactiveScore.Value; }
 
     /// <summary>
     ///  ゲームの1ターン分サイクルの実行
@@ -322,7 +324,7 @@ public class InGameModel : MonoBehaviour
     /// </summary>
     public bool IsHighScore()
     {
-        return score > highScore;
+        return reactiveScore.Value > highScore;
     }
 
     /// <summary>

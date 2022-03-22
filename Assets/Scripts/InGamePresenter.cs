@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UniRx;
 
 public class InGamePresenter : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class InGamePresenter : MonoBehaviour
         //以下各構造の紐付け
         // Model → View
         // Modelの値の変更を監視する
-        inGameModel.OnChangeScore += inGameView.SetScore;
+        inGameModel.ReactiveScore.Subscribe(score => inGameView.SetScore(score)).AddTo(this);
         // ステージのCell状の値の変更を監視する
         inGameModel.OnChangeStageState += inGameView.ApplyStageView;
         inGameModel.OnChangeHighScore += inGameView.SetHighScore;
