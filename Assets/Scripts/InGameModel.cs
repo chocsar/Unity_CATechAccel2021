@@ -7,9 +7,10 @@ public class InGameModel : MonoBehaviour
     // 変数の宣言
     private ReactiveProperty<int> reactiveScore = new ReactiveProperty<int>();
     public IObservable<int> ReactiveScore => reactiveScore;
-
     private ReactiveProperty<int> reactiveHighScore = new ReactiveProperty<int>();
     public IObservable<int> ReactiveHighScore => reactiveHighScore;
+
+    public Subject<Unit> OnGameOver = new Subject<Unit>();
 
     /// <summary> 生成するCellの値を入れた配列 </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
@@ -19,7 +20,6 @@ public class InGameModel : MonoBehaviour
 
     // C# Action
     public event Action<int[,]> OnChangeStageState;
-    public event Action OnGameOver;
 
     // <summary>
     /// ゲームの初期状態を生成
@@ -316,7 +316,7 @@ public class InGameModel : MonoBehaviour
         CreateNewRandomCell();
         OnChangeStageState?.Invoke(stageState);
 
-        if (IsGameOver(stageState)){ OnGameOver?.Invoke(); }
+        if (IsGameOver(stageState)){ OnGameOver?.OnNext(Unit.Default); }
         isDirty = false;
     }
 

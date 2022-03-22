@@ -20,6 +20,7 @@ public class InGamePresenter : MonoBehaviour
         inGameModel.ReactiveScore.Subscribe(score => inGameView.SetScore(score)).AddTo(this);
         inGameModel.ReactiveHighScore.Subscribe(highScore => inGameView.SetHighScore(highScore)).AddTo(this);
         // ステージのCell状の値の変更を監視する
+        //inGameModel.ReactiveChangeStageState.Subscribe(state => inGameView.ApplyStageView(state)).AddTo(this);
         inGameModel.OnChangeStageState += inGameView.ApplyStageView;
 
         // View → Model
@@ -30,8 +31,7 @@ public class InGamePresenter : MonoBehaviour
         inGameView.OnInputDown += inGameModel.MoveCellsDown;
 
         // Model → Presenter
-        inGameModel.OnGameOver += OnGameOverProcess;
-
+        inGameModel.OnGameOver.Subscribe(_ => OnGameOverProcess()).AddTo(this);
 
         // ManagerView → MenuView
         inGameView.OnClickMenuButton += menuWindowView.OpenWindow;
