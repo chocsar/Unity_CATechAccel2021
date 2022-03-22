@@ -18,9 +18,9 @@ public class InGamePresenter : MonoBehaviour
         // Model → View
         // Modelの値の変更を監視する
         inGameModel.ReactiveScore.Subscribe(score => inGameView.SetScore(score)).AddTo(this);
+        inGameModel.ReactiveHighScore.Subscribe(highScore => inGameView.SetHighScore(highScore)).AddTo(this);
         // ステージのCell状の値の変更を監視する
         inGameModel.OnChangeStageState += inGameView.ApplyStageView;
-        inGameModel.OnChangeHighScore += inGameView.SetHighScore;
 
         // View → Model
         // Viewの右矢印が押されているかを監視する

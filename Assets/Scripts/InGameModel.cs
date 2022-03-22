@@ -7,8 +7,10 @@ public class InGameModel : MonoBehaviour
     // 変数の宣言
     private ReactiveProperty<int> reactiveScore = new ReactiveProperty<int>();
     public IObservable<int> ReactiveScore => reactiveScore;
-    
-    private int highScore;
+
+    private ReactiveProperty<int> reactiveHighScore = new ReactiveProperty<int>();
+    public IObservable<int> ReactiveHighScore => reactiveHighScore;
+
     /// <summary> 生成するCellの値を入れた配列 </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
     private readonly int[,] stageState = new int[Const.SquareSize, Const.SquareSize];
@@ -18,7 +20,6 @@ public class InGameModel : MonoBehaviour
     // C# Action
     public event Action<int[,]> OnChangeStageState;
     public event Action OnGameOver;
-    public event Action<int> OnChangeHighScore;
 
     // <summary>
     /// ゲームの初期状態を生成
@@ -324,7 +325,7 @@ public class InGameModel : MonoBehaviour
     /// </summary>
     public bool IsHighScore()
     {
-        return reactiveScore.Value > highScore;
+        return reactiveScore.Value > reactiveHighScore.Value;
     }
 
     /// <summary>
@@ -332,8 +333,6 @@ public class InGameModel : MonoBehaviour
     /// </summary>
     public void SetHighScore(int score)
     {
-        highScore = score;
-        // ハイスコアの値をViewに反映
-        OnChangeHighScore?.Invoke(score);
+        reactiveHighScore.Value = score;
     }
 }
