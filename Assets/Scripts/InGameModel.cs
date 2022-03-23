@@ -4,12 +4,13 @@ using UniRx;
 
 public class InGameModel : MonoBehaviour
 {
-    // 変数の宣言
+    // ReactivePropertyの宣言
     private ReactiveProperty<int> reactiveScore = new ReactiveProperty<int>();
-    public IObservable<int> ReactiveScore => reactiveScore;
     private ReactiveProperty<int> reactiveHighScore = new ReactiveProperty<int>();
+    // IObservableの宣言
+    public IObservable<int> ReactiveScore => reactiveScore;
     public IObservable<int> ReactiveHighScore => reactiveHighScore;
-
+    // Subjectの宣言
     public Subject<Unit> OnGameOver = new Subject<Unit>();
     public Subject<int[,]> OnChangeStageState = new Subject<int[,]>();
 
@@ -300,7 +301,6 @@ public class InGameModel : MonoBehaviour
     public void SetScore(int cellValue)
     {
         reactiveScore.Value += cellValue * 2;
-        //OnChangeScore?.Invoke(score);
     }
 
     public int GetScore(){ return reactiveScore.Value; }
