@@ -1,22 +1,26 @@
 ﻿using UnityEngine;
 using System;
+using UniRx;
 
 public class InGameModel : MonoBehaviour
 {
-    // 変数の宣言
-    private int score;
-    private int highScore;
+    // ReactivePropertyの宣言
+    private ReactiveProperty<int> reactiveScore = new ReactiveProperty<int>();
+    private ReactiveProperty<int> reactiveHighScore = new ReactiveProperty<int>();
+    // IObservableの宣言
+    public IObservable<int> ReactiveScore => reactiveScore;
+    public IObservable<int> ReactiveHighScore => reactiveHighScore;
+    public IObservable<Unit> OnGameOver => onGameOver;
+    public IObservable<int[,]> OnChangeStageState => onChangeStageState;
+    // Subjectの宣言
+    private Subject<Unit> onGameOver = new Subject<Unit>();
+    private Subject<int[,]> onChangeStageState = new Subject<int[,]>();
+
     /// <summary> 生成するCellの値を入れた配列 </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
     private readonly int[,] stageState = new int[Const.SquareSize, Const.SquareSize];
     /// <summary> 盤面の再描画を行う必要があるかのフラグ </summary>
     private bool isDirty;
-
-    // C# Action
-    public event Action<int> OnChangeScore;
-    public event Action<int[,]> OnChangeStageState;
-    public event Action OnGameOver;
-    public event Action<int> OnChangeHighScore;
 
     // <summary>
     /// ゲームの初期状態を生成
@@ -26,7 +30,7 @@ public class InGameModel : MonoBehaviour
         // ステージの初期状態を生成
         InitializeStage();
         // ステージの初期状態をViewに反映
-        OnChangeStageState?.Invoke(stageState);
+        onChangeStageState?.OnNext(stageState);
     }
 
     /// <summary>
@@ -298,11 +302,10 @@ public class InGameModel : MonoBehaviour
     /// </summary>
     public void SetScore(int cellValue)
     {
-        score += cellValue * 2;
-        OnChangeScore?.Invoke(score);
+        reactiveScore.Value += cellValue * 2;
     }
 
-    public int GetScore(){ return score; }
+    public int GetScore(){ return reactiveScore.Value; }
 
     /// <summary>
     ///  ゲームの1ターン分サイクルの実行
@@ -311,9 +314,9 @@ public class InGameModel : MonoBehaviour
     {
         if (!isDirty) { return; }
         CreateNewRandomCell();
-        OnChangeStageState?.Invoke(stageState);
+        onChangeStageState?.OnNext(stageState);
 
-        if (IsGameOver(stageState)){ OnGameOver?.Invoke(); }
+        if (IsGameOver(stageState)){ onGameOver?.OnNext(Unit.Default); }
         isDirty = false;
     }
 
@@ -322,7 +325,7 @@ public class InGameModel : MonoBehaviour
     /// </summary>
     public bool IsHighScore()
     {
-        return score > highScore;
+        return reactiveScore.Value > reactiveHighScore.Value;
     }
 
     /// <summary>
@@ -330,8 +333,6 @@ public class InGameModel : MonoBehaviour
     /// </summary>
     public void SetHighScore(int score)
     {
-        highScore = score;
-        // ハイスコアの値をViewに反映
-        OnChangeHighScore?.Invoke(score);
+        reactiveHighScore.Value = score;
     }
 }
