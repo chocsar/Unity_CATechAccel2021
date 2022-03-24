@@ -10,9 +10,11 @@ public class InGameModel : MonoBehaviour
     // IObservableの宣言
     public IObservable<int> ReactiveScore => reactiveScore;
     public IObservable<int> ReactiveHighScore => reactiveHighScore;
+    public IObservable<Unit> OnGameOver => onGameOver;
+    public IObservable<int[,]> OnChangeStageState => onChangeStageState;
     // Subjectの宣言
-    public Subject<Unit> OnGameOver = new Subject<Unit>();
-    public Subject<int[,]> OnChangeStageState = new Subject<int[,]>();
+    private Subject<Unit> onGameOver = new Subject<Unit>();
+    private Subject<int[,]> onChangeStageState = new Subject<int[,]>();
 
     /// <summary> 生成するCellの値を入れた配列 </summary>
     private int[] generateCellNumbers = new int[2] { 2, 4 };
@@ -28,7 +30,7 @@ public class InGameModel : MonoBehaviour
         // ステージの初期状態を生成
         InitializeStage();
         // ステージの初期状態をViewに反映
-        OnChangeStageState?.OnNext(stageState);
+        onChangeStageState?.OnNext(stageState);
     }
 
     /// <summary>
@@ -312,9 +314,9 @@ public class InGameModel : MonoBehaviour
     {
         if (!isDirty) { return; }
         CreateNewRandomCell();
-        OnChangeStageState?.OnNext(stageState);
+        onChangeStageState?.OnNext(stageState);
 
-        if (IsGameOver(stageState)){ OnGameOver?.OnNext(Unit.Default); }
+        if (IsGameOver(stageState)){ onGameOver?.OnNext(Unit.Default); }
         isDirty = false;
     }
 
