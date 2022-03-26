@@ -1,11 +1,29 @@
 {
-    "highScore": 1000,
+    "highScore": 2044,
     "scoreDatas": [
         {
             "recordScore": 1000
         },
         {
             "recordScore": 200
+        },
+        {
+            "recordScore": 100
+        },
+        {
+            "recordScore": 716
+        },
+        {
+            "recordScore": 296
+        },
+        {
+            "recordScore": 1840
+        },
+        {
+            "recordScore": 1140
+        },
+        {
+            "recordScore": 2044
         }
     ]
 }
