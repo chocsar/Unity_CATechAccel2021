@@ -1,10 +1,11 @@
 {
-  "scoreDatas": [
-    {
-        "recordScore": 1000
-    },
-    {
-        "recordScore": 200
-    }
-  ]
+    "highScore": 1000,
+    "scoreDatas": [
+        {
+            "recordScore": 1000
+        },
+        {
+            "recordScore": 200
+        }
+    ]
 }

@@ -8,6 +8,7 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     [System.Serializable]
     private struct ScoreDatas
     {
+        public int highScore;
         public Score[] scoreDatas;
     }
     [System.Serializable]
@@ -18,13 +19,16 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
 
     // ScoreDataを保存するList
     public List<int> ScoreData;
+    private int gameScore;
+
+    ScoreDatas scoreData;
 
     private void Start()
     {
         // RankingData.jsonをテキストファイルとして読み取り、string型で受け取る
         string inputString = Resources.Load<TextAsset>("RankingData").ToString();
         // 上で作成したクラスへデシリアライズ
-        ScoreDatas scoreData = JsonUtility.FromJson<ScoreDatas>(inputString);
+        scoreData = JsonUtility.FromJson<ScoreDatas>(inputString);
         // ScoreDataのListへJSONのデータを代入
         for (int scoreCount = 0;scoreCount < scoreData.scoreDatas.Length; scoreCount++)
         {
@@ -43,7 +47,9 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     /// </summary>
     public void SaveScore(int score)
     {
-        PlayerPrefs.SetInt(SaveKeyNames.Score.ToString(), score);
+        //PlayerPrefs.SetInt(SaveKeyNames.Score.ToString(), score);
+        ScoreData.Add(score);
+        gameScore = score;
     }
 
     /// <summary>
@@ -51,7 +57,7 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     /// </summary>
     public int LoadScore()
     {
-        return PlayerPrefs.GetInt(SaveKeyNames.Score.ToString(), 0);
+        return gameScore;
     }
 
     /// <summary>
@@ -67,6 +73,6 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     /// </summary>
     public int GetHighScore()
     {
-        return PlayerPrefs.GetInt(SaveKeyNames.HighScore.ToString(), 0);
+        return scoreData.highScore;
     }
 }
