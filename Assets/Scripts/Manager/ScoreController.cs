@@ -25,8 +25,20 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     ScoreDatas scoreData;
     string inputString;
 
+    string dataPath;
+
     private void Start()
     {
+        //プラットフォームに応じてJSONデータソースを切り替える
+#if UNITY_IOS
+        dataPath = Application.dataPath + "/Raw";
+#elif UNITY_ANDROID
+        dataPath = "jar:file://" + Application.dataPath + "!/assets/";
+#elif UNITY_EDITOR
+        dataPath = Const.jsonDataPath;
+#else
+        dataPath = Application.dataPath + "/StreamingAssets";
+#endif
         LoadScoreJson();
     }
 
@@ -61,7 +73,6 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     /// </summary>
     public int GetHighScore()
     {
-        LoadScoreJson();
         return scoreData.highScore;
     }
 
@@ -79,7 +90,7 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     /// </summary>
     private void SaveScoreJson()
     {
-        StreamWriter writer = new StreamWriter(Const.jsonDataPath, false);
+        StreamWriter writer = new StreamWriter(dataPath, false);
         writer.WriteLine(JsonUtility.ToJson(scoreData, true));
         writer.Flush();
         writer.Close();
@@ -91,7 +102,8 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     private void LoadScoreJson()
     {
         // RankingData.jsonをテキストファイルとして読み取り、string型で受け取る
-        inputString = Resources.Load<TextAsset>("RankingData").ToString();
+        StreamReader reader = new StreamReader(dataPath);
+        inputString = reader.ReadToEnd();
         // 上で作成したクラスへデシリアライズ
         scoreData = JsonUtility.FromJson<ScoreDatas>(inputString);
         // ScoreDataのListへJSONのデータを代入
@@ -99,5 +111,7 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
         {
             ScoreData.Add(scoreData.scoreDatas[scoreCount].recordScore);
         }
+
+        reader.Close();
     }
 }
