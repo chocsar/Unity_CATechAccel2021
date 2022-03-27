@@ -1,14 +1,8 @@
 {
-    "highScore": 600,
+    "highScore":  0,
     "scoreDatas": [
         {
-            "recordScore": 10
-        },
-        {
-            "recordScore": 600
-        },
-        {
-            "recordScore": 596
+            "recordScore": 0
         }
     ]
 }

@@ -30,14 +30,10 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     private void Start()
     {
         //プラットフォームに応じてJSONデータソースを切り替える
-#if UNITY_IOS
-        dataPath = Application.dataPath + "/Raw";
-#elif UNITY_ANDROID
-        dataPath = "jar:file://" + Application.dataPath + "!/assets/";
-#elif UNITY_EDITOR
-        dataPath = Const.jsonDataPath;
+#if UNITY_ANDROID
+        dataPath = "jar:file://" + Application.persistentDataPath + "!/assets" + "/SaveRankingData.json";
 #else
-        dataPath = Application.dataPath + "/StreamingAssets";
+        dataPath = Application.persistentDataPath + "/SaveRankingData.json";
 #endif
         LoadScoreJson();
     }
@@ -101,6 +97,14 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     /// </summary>
     private void LoadScoreJson()
     {
+        if (!File.Exists(dataPath) )
+        {
+            Debug.Log("error");
+            File.Copy(Const.jsonDataPath, dataPath);
+            Debug.Log("copy");
+        }
+
+
         // RankingData.jsonをテキストファイルとして読み取り、string型で受け取る
         StreamReader reader = new StreamReader(dataPath);
         inputString = reader.ReadToEnd();
