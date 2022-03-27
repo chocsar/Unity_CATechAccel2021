@@ -18,22 +18,22 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
         public int recordScore;
     }
 
-    // ScoreDataを保存するList
+    /// <summary> ScoreDataを保存するList </summary>
     public List<int> ScoreData;
+    /// <summary> ゲームのスコアの保存をする変数 </summary>
     private int gameScore;
-
+    /// <summary> スコアのデータを保存するJsonのデータ構造 </summary>
     ScoreDatas scoreData;
-    string inputString;
-
+    /// <summary> スコアのデータを保存するJsonのデータパスを代入 </summary>
     string dataPath;
 
     private void Start()
     {
         //プラットフォームに応じてJSONデータソースを切り替える
 #if UNITY_ANDROID
-        dataPath = "jar:file://" + Application.persistentDataPath + "!/assets" + "/SaveRankingData.json";
+        dataPath = "jar:file://" + Application.persistentDataPath + "!/assets" + Const.jsonFileName;
 #else
-        dataPath = Application.persistentDataPath + "/SaveRankingData.json";
+        dataPath = Application.persistentDataPath + Const.jsonFileName;
 #endif
         LoadScoreJson();
     }
@@ -99,15 +99,12 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     {
         if (!File.Exists(dataPath) )
         {
-            Debug.Log("error");
             File.Copy(Const.jsonDataPath, dataPath);
-            Debug.Log("copy");
         }
-
 
         // RankingData.jsonをテキストファイルとして読み取り、string型で受け取る
         StreamReader reader = new StreamReader(dataPath);
-        inputString = reader.ReadToEnd();
+        string inputString = reader.ReadToEnd();
         // 上で作成したクラスへデシリアライズ
         scoreData = JsonUtility.FromJson<ScoreDatas>(inputString);
         // ScoreDataのListへJSONのデータを代入
