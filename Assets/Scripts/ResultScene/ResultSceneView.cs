@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public class ResultSceneView : MonoBehaviour
 {
     [SerializeField] private Text resultText;
+    [SerializeField] private Button retryButton;
 
+    public event Action OnClickRetryButton;
 
     private void Start()
     {
-        resultText.text = ScoreController.Instance.LoadScore().ToString();
+        retryButton.onClick.AddListener(() => OnClickRetryButton?.Invoke());
+
     }
 
 
@@ -20,10 +24,4 @@ public class ResultSceneView : MonoBehaviour
         resultText.text = text;
     }
 
-
-
-    public void OnClickRetryButton()
-    {
-        SceneController.Instance.LoadScene(SceneController.SceneNames.InGameScene);
-    }
 }
