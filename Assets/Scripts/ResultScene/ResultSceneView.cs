@@ -2,10 +2,10 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Result : MonoBehaviour
+public class ResultSceneView : MonoBehaviour
 {
-    [SerializeField]
-    private Text resultText;
+    [SerializeField] private Text resultText;
+
 
     private void Start()
     {
@@ -15,7 +15,10 @@ public class Result : MonoBehaviour
 
 
 
-
+    public void SetResultText(string text)
+    {
+        resultText.text = text;
+    }
 
 
 
