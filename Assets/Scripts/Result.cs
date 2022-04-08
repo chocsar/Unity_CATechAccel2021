@@ -12,6 +12,13 @@ public class Result : MonoBehaviour
         resultText.text = ScoreController.Instance.LoadScore().ToString();
     }
 
+
+
+
+
+
+
+
     public void OnClickRetryButton()
     {
         SceneController.Instance.LoadScene(SceneController.SceneNames.InGameScene);
