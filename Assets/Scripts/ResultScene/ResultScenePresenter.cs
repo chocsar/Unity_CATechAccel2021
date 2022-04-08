@@ -14,10 +14,13 @@ public class ResultScenePresenter : MonoBehaviour
         resultSceneModel = GetComponent<ResultSceneModel>();
         resultSceneView = GetComponent<ResultSceneView>();
 
-        // Model → Presenter
+        // View → Presenter
         resultSceneView.OnClickRetryButton += LoadGameScene;
 
-        resultSceneModel.OnChangeResultText += resultSceneView.SetResultText;
+        // Model → View
+        resultSceneModel.OnChangeHighScore += resultSceneView.SetResultText;
+
+        resultSceneModel.SetHighScore(ScoreController.Instance.GetHighScore());
     }
 
     /// <summary>

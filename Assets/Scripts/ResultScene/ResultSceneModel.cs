@@ -7,19 +7,19 @@ public class ResultSceneModel : MonoBehaviour
 {
 
     public event Action<string> OnChangeResultText;
+    public event Action<int> OnChangeHighScore;
 
     // Start is called before the first frame update
     void Start()
     {
-        SetResultText(ScoreController.Instance.LoadScore().ToString());
+        SetHighScore(ScoreController.Instance.LoadScore());
     }
 
-    /// <summary> 
-    /// 
+    /// <summary>
+    /// ハイスコアの値セットとViewへのイベントを発火
     /// </summary>
-    public void SetResultText(string resultText)
+    public void SetHighScore(int score)
     {
-        Debug.Log(resultText);
-        OnChangeResultText?.Invoke(resultText);
+        OnChangeHighScore?.Invoke(score);
     }
 }

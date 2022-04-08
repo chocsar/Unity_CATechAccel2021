@@ -16,12 +16,9 @@ public class ResultSceneView : MonoBehaviour
 
     }
 
-
-
-
-    public void SetResultText(string text)
+    public void SetResultText(int score)
     {
-        resultText.text = text;
+        resultText.text = score.ToString();
     }
 
 }
