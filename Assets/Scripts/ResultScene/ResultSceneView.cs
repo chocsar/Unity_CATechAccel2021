@@ -22,11 +22,9 @@ public class ResultSceneView : MonoBehaviour
 
         for(int i = 0; i < 10; i++)
         {
-            // Itemを生成
+            // Itemを生成 , Contentの子として登録  
             var item = Instantiate(rankElementPrefab, scrollbarContent);
-            item.GetComponent<RectTransform>().position += new Vector3(0, -i*180, 0);
 
-            // Contentの子として登録  
         }
 
 
