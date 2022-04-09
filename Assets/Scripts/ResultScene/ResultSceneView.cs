@@ -20,14 +20,6 @@ public class ResultSceneView : MonoBehaviour
     {
         retryButton.onClick.AddListener(() => OnClickRetryButton?.Invoke());
 
-        for(int i = 0; i < 10; i++)
-        {
-            // Itemを生成 , Contentの子として登録  
-            var item = Instantiate(rankElementPrefab, scrollbarContent);
-
-        }
-
-
     }
 
     public void SetResultText(int score)
@@ -35,4 +27,13 @@ public class ResultSceneView : MonoBehaviour
         resultText.text = score.ToString();
     }
 
+    private void SetRankElement()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            // Itemを生成 , Contentの子として登録  
+            var item = Instantiate(rankElementPrefab, scrollbarContent);
+
+        }
+    }
 }
