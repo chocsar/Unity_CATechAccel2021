@@ -7,4 +7,6 @@ public class RankElement : MonoBehaviour
     public Image separateImage;
     public Text rankText;
     public Text scoreText;
+    public string rank;
+    public string score;
 }

@@ -19,6 +19,7 @@ public class ResultScenePresenter : MonoBehaviour
 
         // Model → View
         resultSceneModel.OnChangeHighScore += resultSceneView.SetResultText;
+        resultSceneModel.OnSetRankElement += resultSceneView.GenerateRankElement;
 
         resultSceneModel.SetHighScore(ScoreController.Instance.GetHighScore());
     }
