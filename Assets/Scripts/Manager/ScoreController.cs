@@ -123,4 +123,13 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     {
         return scoreDataList.Count;
     }
+
+    /// <summary>
+    ///  スコアのデータリストをソートする
+    /// </summary>
+    public void ScoreDataSort()
+    {
+        scoreDataList.Sort();
+        scoreDataList.Reverse();
+    }
 }
