@@ -22,4 +22,6 @@ public class ResultSceneModel : MonoBehaviour
     {
         OnChangeHighScore?.Invoke(score);
     }
+
+
 }
