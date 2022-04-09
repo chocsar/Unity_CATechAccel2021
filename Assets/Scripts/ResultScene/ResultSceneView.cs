@@ -7,11 +7,8 @@ public class ResultSceneView : MonoBehaviour
 {
     [SerializeField] private Text resultText;
     [SerializeField] private Button retryButton;
-
     [SerializeField] private RectTransform rankElementPrefab;
-
     [SerializeField] private RectTransform scrollbarContent;
-
 
     // C#Action
     public event Action OnClickRetryButton;
@@ -19,8 +16,6 @@ public class ResultSceneView : MonoBehaviour
     private void Start()
     {
         retryButton.onClick.AddListener(() => OnClickRetryButton?.Invoke());
-
-        
     }
 
     /// <summary>

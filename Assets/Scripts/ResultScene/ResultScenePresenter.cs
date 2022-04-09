@@ -18,10 +18,8 @@ public class ResultScenePresenter : MonoBehaviour
         resultSceneView.OnClickRetryButton += LoadGameScene;
 
         // Model → View
-        resultSceneModel.OnChangeHighScore += resultSceneView.SetResultText;
+        resultSceneModel.OnChangeResultScore += resultSceneView.SetResultText;
         resultSceneModel.OnSetRankElement += resultSceneView.GenerateRankElement;
-
-        resultSceneModel.SetHighScore(ScoreController.Instance.GetHighScore());
     }
 
     /// <summary>
@@ -30,6 +28,5 @@ public class ResultScenePresenter : MonoBehaviour
     private void LoadGameScene()
     {
         SceneController.Instance.LoadScene(SceneController.SceneNames.InGameScene);
-
     }
 }
