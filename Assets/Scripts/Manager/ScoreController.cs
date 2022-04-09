@@ -132,4 +132,12 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
         scoreDataList.Sort();
         scoreDataList.Reverse();
     }
+
+    /// <summary>
+    /// ScoreListの値を返す
+    /// </summary>
+    public int GetScoreListValue(int rank)
+    {
+        return scoreDataList[rank];
+    }
 }
