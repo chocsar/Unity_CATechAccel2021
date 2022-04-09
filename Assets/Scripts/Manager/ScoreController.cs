@@ -19,7 +19,7 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
     }
 
     /// <summary> ScoreDataを保存するList </summary>
-    public List<int> ScoreData;
+    public List<int> scoreDataList;
     /// <summary> ゲームのスコアの保存をする変数 </summary>
     private int gameScore;
     /// <summary> スコアのデータを保存するJsonのデータ構造 </summary>
@@ -110,9 +110,17 @@ public class ScoreController : SingletonMonoBehaviour<ScoreController>
         // ScoreDataのListへJSONのデータを代入
         for (int scoreCount = 0; scoreCount < scoreData.scoreDatas.Count; scoreCount++)
         {
-            ScoreData.Add(scoreData.scoreDatas[scoreCount].recordScore);
+            scoreDataList.Add(scoreData.scoreDatas[scoreCount].recordScore);
         }
 
         reader.Close();
+    }
+
+    /// <summary>
+    /// スコアデータリストのデータ数を返す変数
+    /// </summary>
+    public int GetScoreCount()
+    {
+        return scoreDataList.Count;
     }
 }
