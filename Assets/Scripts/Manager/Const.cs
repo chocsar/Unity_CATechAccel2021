@@ -15,4 +15,8 @@ public class Const
         Up,
         Down, 
     }
+    /// <summary> ランキングデータを保存するMaster JSONファイルのパス </summary>
+    public const string jsonDataPath = "Assets/Resources/RankingData.json";
+    /// <summary> ランキングデータを保存するJSONファイルの名前 </summary>
+    public const string jsonFileName = "/RankingData.json";
 }
